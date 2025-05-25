@@ -61,7 +61,10 @@ backgroundImageInput.addEventListener('change', function () {
   }
 });
 
-backgroundOpacity.addEventListener('input', updatePreview);
+backgroundOpacity.addEventListener('input', () => {
+  document.getElementById('opacityVal').textContent = Math.round(backgroundOpacity.value * 100);
+  updatePreview();
+});
 
 function updatePreview() {
   const title = document.getElementById('previewTitle');
@@ -112,7 +115,6 @@ function printPoster() {
       : bgImageSrc || '';
 
   const bgColor = backgroundType.value === 'white' ? '#ffffff' : 'transparent';
-  const bgStyle = bgUrl ? `url('${bgUrl}')` : bgColor;
 
   const printWindow = window.open('', '_blank');
   printWindow.document.write(`
@@ -127,6 +129,7 @@ function printPoster() {
           body {
             margin: 0;
             padding: 0;
+            background-color: white;
           }
           .poster {
             width: ${width};
@@ -138,17 +141,25 @@ function printPoster() {
             align-items: center;
             text-align: center;
             font-family: Arial, sans-serif;
-            background-image: ${bgStyle};
-            background-size: cover;
-            background-position: center;
             color: black;
             page-break-inside: avoid;
             position: relative;
-            background-color: ${backgroundType.value === 'white' ? '#ffffff' : 'transparent'};
+          }
+          .bg-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: ${backgroundOpacity.value};
+            z-index: 0;
           }
           .content {
             z-index: 1;
-            text-shadow: ${backgroundType.value === 'white' ? 'none' : '0 0 5px rgba(255,255,255,0.5)'};
+            text-shadow: ${bgColor !== 'transparent' ? 'none' : '0 0 5px rgba(255,255,255,0.5)'};
+            padding: 20px;
+            text-align: center;
           }
           h1 {
             font-size: ${titleFontSize.value}pt;
@@ -164,10 +175,14 @@ function printPoster() {
             font-size: ${priceFontSize.value}pt;
             color: ${priceColor.value};
           }
+          body {
+            background-color: ${bgColor};
+          }
         </style>
       </head>
       <body>
         <div class="poster">
+          ${bgUrl ? `<img src="${bgUrl}" alt="Background" class="bg-img" />` : ''}
           <div class="content">
             <h1>${titleInput.value}</h1>
             <p>${productInput.value || "اسم المادة"}</p>
