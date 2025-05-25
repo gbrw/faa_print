@@ -2,7 +2,6 @@ const titleInput = document.getElementById('title');
 const productInput = document.getElementById('product');
 const priceInput = document.getElementById('price');
 const orientationSelect = document.getElementById('orientation');
-const posterPreview = document.getElementById('posterPreview');
 
 // Font Sizes
 const titleFontSize = document.getElementById('titleFontSize');
@@ -40,6 +39,8 @@ const backgroundOpacity = document.getElementById('backgroundOpacity');
 const customBackgroundInput = document.getElementById('customBackgroundInput');
 let bgImageSrc = '/images/alfajr.png';
 
+let backgroundImageObj = null;
+
 backgroundType.addEventListener('change', () => {
   if (backgroundType.value === 'custom') {
     customBackgroundInput.style.display = 'block';
@@ -55,7 +56,9 @@ backgroundImageInput.addEventListener('change', function () {
     const reader = new FileReader();
     reader.onload = function (e) {
       bgImageSrc = e.target.result;
-      updatePreview();
+      backgroundImageObj = new Image();
+      backgroundImageObj.src = bgImageSrc;
+      backgroundImageObj.onload = () => updatePreview();
     };
     reader.readAsDataURL(file);
   }
@@ -83,7 +86,7 @@ function updatePreview() {
   product.style.color = productColor.value;
   price.style.color = priceColor.value;
 
-  const bgOverlay = posterPreview.querySelector('.bg-overlay');
+  const bgOverlay = document.querySelector('.bg-overlay');
 
   if (backgroundType.value === 'white') {
     bgOverlay.style.backgroundImage = 'none';
@@ -93,6 +96,10 @@ function updatePreview() {
     bgOverlay.style.backgroundImage = `url(/images/alfajr.png)`;
     bgOverlay.style.backgroundColor = 'transparent';
     bgOverlay.style.opacity = backgroundOpacity.value;
+    if (!backgroundImageObj) {
+      backgroundImageObj = new Image();
+      backgroundImageObj.src = '/images/alfajr.png';
+    }
   } else if (bgImageSrc) {
     bgOverlay.style.backgroundImage = `url(${bgImageSrc})`;
     bgOverlay.style.backgroundColor = 'transparent';
@@ -109,12 +116,10 @@ function printPoster() {
   const width = orientation === 'landscape' ? '297mm' : '210mm';
   const height = orientation === 'landscape' ? '210mm' : '297mm';
 
-  const bgUrl =
-    backgroundType.value === 'default'
-      ? '/images/alfajr.png'
-      : bgImageSrc || '';
-
   const bgColor = backgroundType.value === 'white' ? '#ffffff' : 'transparent';
+  const bgUrl = backgroundType.value === 'default'
+    ? '/images/alfajr.png'
+    : bgImageSrc || '';
 
   const printWindow = window.open('', '_blank');
   printWindow.document.write(`
@@ -144,6 +149,7 @@ function printPoster() {
             color: black;
             page-break-inside: avoid;
             position: relative;
+            background-color: ${bgColor};
           }
           .bg-img {
             position: absolute;
@@ -175,9 +181,6 @@ function printPoster() {
             font-size: ${priceFontSize.value}pt;
             color: ${priceColor.value};
           }
-          body {
-            background-color: ${bgColor};
-          }
         </style>
       </head>
       <body>
@@ -202,34 +205,85 @@ function printPoster() {
   }, 250);
 }
 
-async function downloadPosterAsImage() {
-  const poster = document.querySelector("#posterPreview");
+// تحديد مقاس A4 بالبكسل (300dpi)
+const A4_WIDTH_PX = 2480; // A4 أفقي 297mm × 210mm × 300dpi ≈ 2480x3508px
+const A4_HEIGHT_PX = 3508;
 
-  const canvas = await html2canvas(poster, { scale: 2 });
-  const link = document.createElement("a");
-  link.download = "poster.png";
-  link.href = canvas.toDataURL("image/png");
-  link.click();
+async function generateA4Canvas(resolve) {
+  const canvas = document.createElement('canvas');
+  canvas.width = A4_WIDTH_PX;
+  canvas.height = A4_HEIGHT_PX;
+  const ctx = canvas.getContext('2d');
+
+  // خلفية بيضاء
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  let bgImg = null;
+
+  if (backgroundType.value === 'default') {
+    bgImg = new Image();
+    bgImg.src = '/images/alfajr.png';
+    await new Promise(r => bgImg.onload = r);
+  } else if (backgroundType.value === 'custom' && bgImageSrc) {
+    bgImg = new Image();
+    bgImg.src = bgImageSrc;
+    await new Promise(r => bgImg.onload = r);
+  }
+
+  // رسم الخلفية
+  if (bgImg) {
+    ctx.save();
+    ctx.globalAlpha = parseFloat(backgroundOpacity.value);
+    ctx.drawImage(bgImg, 0, 0, A4_WIDTH_PX, A4_HEIGHT_PX);
+    ctx.restore();
+  }
+
+  // إعداد الخطوط
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+
+  const centerX = A4_WIDTH_PX / 2;
+  const centerY = A4_HEIGHT_PX / 2;
+
+  // العنوان
+  ctx.font = `${parseInt(titleFontSize.value)}pt Cairo, Arial, sans-serif`;
+  ctx.fillStyle = titleColor.value;
+  ctx.fillText(titleInput.value || 'عرض خاص', centerX, centerY - 300);
+
+  // اسم المادة
+  ctx.font = `${parseInt(productFontSize.value)}pt Cairo, Arial, sans-serif`;
+  ctx.fillStyle = productColor.value;
+  ctx.fillText(productInput.value || 'اسم المادة', centerX, centerY);
+
+  // السعر
+  ctx.font = `${parseInt(priceFontSize.value)}pt Cairo, Arial, sans-serif`;
+  ctx.fillStyle = priceColor.value;
+  ctx.fillText(priceInput.value ? `${priceInput.value} د.ع` : 'السعر', centerX, centerY + 300);
+
+  resolve(canvas);
 }
 
-async function downloadPosterAsPDF() {
-  const poster = document.querySelector("#posterPreview");
-
-  const canvas = await html2canvas(poster, { scale: 2 });
-  const imgData = canvas.toDataURL("image/png");
-
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({
-    orientation: poster.classList.contains("landscape") ? "landscape" : "portrait",
-    unit: "mm",
-    format: "a4"
+function downloadPosterAsImage() {
+  new Promise(generateA4Canvas).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'poster.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
   });
-
-  const pdfWidth = pdf.internal.pageSize.getWidth();
-  const pdfHeight = pdf.internal.pageSize.getHeight();
-
-  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-  pdf.save("poster.pdf");
 }
 
-updatePreview();
+function downloadPosterAsPDF() {
+  new Promise(generateA4Canvas).then(canvas => {
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({
+      orientation: orientationSelect.value === 'landscape' ? 'landscape' : 'portrait',
+      unit: 'px',
+      format: [canvas.width, canvas.height]
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    pdf.save('poster.pdf');
+  });
+}
