@@ -101,7 +101,7 @@ function updatePreview() {
 
   // Orientation
   const isLandscape = orientationSelect.value === 'landscape';
-  posterPreview.className = `poster ${isLandscape ? 'landscape' : 'portrait'}`;
+  posterPreview.className = `poster ${isLandscape ? 'landscape' : ''}`;
 }
 
 function printPoster() {
@@ -200,6 +200,36 @@ function printPoster() {
     printWindow.print();
     printWindow.close();
   }, 250);
+}
+
+async function downloadPosterAsImage() {
+  const poster = document.querySelector("#posterPreview");
+
+  const canvas = await html2canvas(poster, { scale: 2 });
+  const link = document.createElement("a");
+  link.download = "poster.png";
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+async function downloadPosterAsPDF() {
+  const poster = document.querySelector("#posterPreview");
+
+  const canvas = await html2canvas(poster, { scale: 2 });
+  const imgData = canvas.toDataURL("image/png");
+
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF({
+    orientation: poster.classList.contains("landscape") ? "landscape" : "portrait",
+    unit: "mm",
+    format: "a4"
+  });
+
+  const pdfWidth = pdf.internal.pageSize.getWidth();
+  const pdfHeight = pdf.internal.pageSize.getHeight();
+
+  pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+  pdf.save("poster.pdf");
 }
 
 updatePreview();
