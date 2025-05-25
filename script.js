@@ -16,12 +16,10 @@ titleFontSize.addEventListener('input', () => {
   document.getElementById('titleFontSizeVal').textContent = titleFontSize.value;
   updateCanvasPreview();
 });
-
 productFontSize.addEventListener('input', () => {
   document.getElementById('productFontSizeVal').textContent = productFontSize.value;
   updateCanvasPreview();
 });
-
 priceFontSize.addEventListener('input', () => {
   document.getElementById('priceFontSizeVal').textContent = priceFontSize.value;
   updateCanvasPreview();
@@ -71,107 +69,121 @@ backgroundOpacity.addEventListener('input', () => {
 titleInput.addEventListener('input', updateCanvasPreview);
 productInput.addEventListener('input', updateCanvasPreview);
 priceInput.addEventListener('input', updateCanvasPreview);
+orientationSelect.addEventListener('change', updateCanvasPreview);
+
+titleColor.addEventListener('input', updateCanvasPreview);
+productColor.addEventListener('input', updateCanvasPreview);
+priceColor.addEventListener('input', updateCanvasPreview);
 
 // --- معاينة Canvas ---
+const posterPreview = document.getElementById('posterPreview');
+const previewCtx = posterPreview.getContext('2d');
+
 function updateCanvasPreview() {
-  const poster = document.getElementById('posterPreview');
-  const ctx = poster.getContext('2d');
   const isLandscape = orientationSelect.value === 'landscape';
 
   const widthMM = isLandscape ? 297 : 210;
   const heightMM = isLandscape ? 210 : 297;
 
-  const DPI = 300;
-  const MM_TO_INCH = 0.0393701;
+  // معاينة على الشاشة (مختصرة)
+  const scale = 0.17; // تقليل الحجم للمعاينة
+  const widthPx = Math.floor(widthMM * MM_TO_INCH * DPI * scale);
+  const heightPx = Math.floor(heightMM * MM_TO_INCH * DPI * scale);
 
-  const widthPx = Math.floor(widthMM * MM_TO_INCH * DPI);
-  const heightPx = Math.floor(heightMM * MM_TO_INCH * DPI);
+  posterPreview.width = widthPx;
+  posterPreview.height = heightPx;
 
-  poster.width = widthPx;
-  poster.height = heightPx;
+  previewCtx.fillStyle = '#ffffff';
+  previewCtx.fillRect(0, 0, widthPx, heightPx);
 
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, widthPx, heightPx);
-
-  // رسم الخلفية
   let bgImg = null;
 
   if (backgroundType.value === 'default') {
     bgImg = new Image();
     bgImg.src = '/images/alfajr.png';
-    bgImg.onload = () => drawPosterOnCanvas(ctx, bgImg, widthPx, heightPx);
+    bgImg.onload = () => drawPreview(previewCtx, bgImg, widthPx, heightPx);
   } else if (backgroundType.value === 'custom' && backgroundImageObj && backgroundImageObj.complete) {
     bgImg = backgroundImageObj;
-    drawPosterOnCanvas(ctx, bgImg, widthPx, heightPx);
+    drawPreview(previewCtx, bgImg, widthPx, heightPx);
+  } else if (backgroundType.value === 'white') {
+    previewCtx.fillStyle = '#ffffff';
+    previewCtx.fillRect(0, 0, widthPx, heightPx);
+    drawTextOnPreview(previewCtx, widthPx, heightPx);
   } else {
-    drawPosterOnCanvas(ctx, null, widthPx, heightPx);
+    drawTextOnPreview(previewCtx, widthPx, heightPx);
   }
 }
 
-function drawPosterOnCanvas(ctx, bgImg, widthPx, heightPx) {
-  const centerX = widthPx / 2;
-  const centerY = heightPx / 2;
-
-  // خلفية بيضاء افتراضية
+function drawPreview(ctx, bgImg, width, height) {
   ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, widthPx, heightPx);
+  ctx.fillRect(0, 0, width, height);
 
-  // رسم الخلفية
   if (bgImg) {
     ctx.save();
     ctx.globalAlpha = parseFloat(backgroundOpacity.value);
 
     const imgRatio = bgImg.width / bgImg.height;
-    const canvasRatio = widthPx / heightPx;
+    const canvasRatio = width / height;
 
     let drawWidth, drawHeight, dx, dy;
 
     if (imgRatio > canvasRatio) {
-      drawWidth = widthPx;
-      drawHeight = widthPx / imgRatio;
+      drawWidth = width;
+      drawHeight = width / imgRatio;
       dx = 0;
-      dy = (heightPx - drawHeight) / 2;
+      dy = (height - drawHeight) / 2;
     } else {
-      drawHeight = heightPx;
-      drawWidth = heightPx * imgRatio;
-      dx = (widthPx - drawWidth) / 2;
+      drawHeight = height;
+      drawWidth = height * imgRatio;
+      dx = (width - drawWidth) / 2;
       dy = 0;
     }
 
     ctx.drawImage(bgImg, dx, dy, drawWidth, drawHeight);
     ctx.restore();
-  } else if (backgroundType.value === 'white') {
-    ctx.fillStyle = '#ffffff';
-    ctx.fillRect(0, 0, widthPx, heightPx);
   }
 
-  // رسم النصوص
+  drawTextOnPreview(ctx, width, height);
+}
+
+function drawTextOnPreview(ctx, width, height) {
+  const centerX = width / 2;
+  const centerY = height / 2;
+
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
   // العنوان
-  ctx.font = `${parseInt(titleFontSize.value)}pt Cairo, Arial, sans-serif`;
+  ctx.font = `${parseInt(titleFontSize.value) * scaleFont()} Cairo, Arial, sans-serif`;
   ctx.fillStyle = titleColor.value;
-  ctx.fillText(titleInput.value || 'عرض خاص', centerX, centerY - 300);
+  ctx.fillText(titleInput.value || 'عرض خاص', centerX, centerY - 60);
 
   // اسم المادة
-  ctx.font = `${parseInt(productFontSize.value)}pt Cairo, Arial, sans-serif`;
+  ctx.font = `${parseInt(productFontSize.value) * scaleFont()} Cairo, Arial, sans-serif`;
   ctx.fillStyle = productColor.value;
   ctx.fillText(productInput.value || 'اسم المادة', centerX, centerY);
 
   // السعر
-  ctx.font = `${parseInt(priceFontSize.value)}pt Cairo, Arial, sans-serif`;
+  ctx.font = `${parseInt(priceFontSize.value) * scaleFont()} Cairo, Arial, sans-serif`;
   ctx.fillStyle = priceColor.value;
-  ctx.fillText(priceInput.value ? `${priceInput.value} د.ع` : 'السعر', centerX, centerY + 300);
+  ctx.fillText(priceInput.value ? `${priceInput.value} د.ع` : 'السعر', centerX, centerY + 60);
+}
+
+function scaleFont() {
+  return 0.17;
 }
 
 // --- إنشاء Canvas بدقة A4 حقيقية ---
-function generateA4Canvas(resolve, isLandscape = false) {
+const MM_TO_INCH = 0.0393701;
+const DPI = 300;
+
+function mmToPx(mm) {
+  return mm * MM_TO_INCH * DPI;
+}
+
+async function generateA4Canvas(resolve, isLandscape = false) {
   const widthMM = isLandscape ? 297 : 210;
   const heightMM = isLandscape ? 210 : 297;
-
-  const DPI = 300;
-  const MM_TO_INCH = 0.0393701;
 
   const widthPx = Math.floor(widthMM * MM_TO_INCH * DPI);
   const heightPx = Math.floor(heightMM * MM_TO_INCH * DPI);
@@ -184,38 +196,20 @@ function generateA4Canvas(resolve, isLandscape = false) {
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, widthPx, heightPx);
 
-  // تحميل الصورة
+  // رسم الخلفية
   let bgImg = null;
 
   if (backgroundType.value === 'default') {
     bgImg = new Image();
     bgImg.crossOrigin = "anonymous";
     bgImg.src = '/images/alfajr.png';
-    bgImg.onload = () => {
-      drawPosterOnCanvasInternal(ctx, bgImg, widthPx, heightPx);
-      resolve(canvas);
-    };
+    await new Promise(r => bgImg.onload = r);
   } else if (backgroundType.value === 'custom' && bgImageSrc) {
     bgImg = new Image();
     bgImg.crossOrigin = "anonymous";
     bgImg.src = bgImageSrc;
-    bgImg.onload = () => {
-      drawPosterOnCanvasInternal(ctx, bgImg, widthPx, heightPx);
-      resolve(canvas);
-    };
-  } else {
-    drawPosterOnCanvasInternal(ctx, null, widthPx, heightPx);
-    resolve(canvas);
+    await new Promise(r => bgImg.onload = r);
   }
-}
-
-function drawPosterOnCanvasInternal(ctx, bgImg, widthPx, heightPx) {
-  const centerX = widthPx / 2;
-  const centerY = heightPx / 2;
-
-  // رسم الخلفية
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, widthPx, heightPx);
 
   if (bgImg) {
     ctx.save();
@@ -243,6 +237,9 @@ function drawPosterOnCanvasInternal(ctx, bgImg, widthPx, heightPx) {
   }
 
   // رسم النصوص
+  const centerX = widthPx / 2;
+  const centerY = heightPx / 2;
+
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
@@ -260,6 +257,8 @@ function drawPosterOnCanvasInternal(ctx, bgImg, widthPx, heightPx) {
   ctx.font = `${parseInt(priceFontSize.value)}pt Cairo, Arial, sans-serif`;
   ctx.fillStyle = priceColor.value;
   ctx.fillText(priceInput.value ? `${priceInput.value} د.ع` : 'السعر', centerX, centerY + 300);
+
+  resolve(canvas);
 }
 
 // --- زر الطباعة ---
@@ -304,9 +303,10 @@ function printPoster() {
   });
 }
 
-// --- تنزيل كصورة ---
+// --- زر التنزيل كصورة ---
 function downloadPosterAsImage() {
   const isLandscape = orientationSelect.value === 'landscape';
+
   new Promise((resolve) => generateA4Canvas(resolve, isLandscape)).then(canvas => {
     const link = document.createElement('a');
     link.download = 'poster.png';
@@ -315,9 +315,10 @@ function downloadPosterAsImage() {
   });
 }
 
-// --- تنزيل كـ PDF ---
+// --- زر التنزيل كـ PDF ---
 function downloadPosterAsPDF() {
   const isLandscape = orientationSelect.value === 'landscape';
+
   new Promise((resolve) => generateA4Canvas(resolve, isLandscape)).then(canvas => {
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF({
