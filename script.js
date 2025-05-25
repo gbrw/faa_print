@@ -4,10 +4,11 @@ const priceInput = document.getElementById('price');
 const orientationSelect = document.getElementById('orientation');
 const posterPreview = document.getElementById('posterPreview');
 
-// Font Size
+// Font Sizes
 const titleFontSize = document.getElementById('titleFontSize');
 const productFontSize = document.getElementById('productFontSize');
 const priceFontSize = document.getElementById('priceFontSize');
+
 document.getElementById('titleFontSizeVal').textContent = titleFontSize.value;
 document.getElementById('productFontSizeVal').textContent = productFontSize.value;
 document.getElementById('priceFontSizeVal').textContent = priceFontSize.value;
@@ -42,14 +43,7 @@ let bgImageSrc = '/images/alfajr.png';
 backgroundType.addEventListener('change', () => {
   if (backgroundType.value === 'custom') {
     customBackgroundInput.style.display = 'block';
-  } else if (backgroundType.value === 'white') {
-    bgImageSrc = '';
-    posterPreview.style.backgroundImage = 'none';
-    posterPreview.style.backgroundColor = '#ffffff';
   } else {
-    bgImageSrc = '/images/alfajr.png';
-    posterPreview.style.backgroundImage = `url(${bgImageSrc})`;
-    posterPreview.style.backgroundColor = 'transparent';
     customBackgroundInput.style.display = 'none';
   }
   updatePreview();
@@ -76,7 +70,7 @@ function updatePreview() {
 
   title.textContent = titleInput.value || "عرض خاص";
   product.textContent = productInput.value || "اسم المادة";
-  price.textContent = priceInput.value ? `${priceInput.value} د.ك` : "السعر";
+  price.textContent = priceInput.value ? `${priceInput.value} د.ع` : "السعر";
 
   title.style.fontSize = titleFontSize.value + 'pt';
   product.style.fontSize = productFontSize.value + 'pt';
@@ -86,13 +80,20 @@ function updatePreview() {
   product.style.color = productColor.value;
   price.style.color = priceColor.value;
 
-  posterPreview.style.backgroundImage = bgImageSrc ? `url(${bgImageSrc})` : 'none';
-  posterPreview.style.opacity = backgroundOpacity.value;
+  const bgOverlay = posterPreview.querySelector('.bg-overlay');
 
   if (backgroundType.value === 'white') {
-    posterPreview.style.backgroundColor = '#ffffff';
-  } else {
-    posterPreview.style.backgroundColor = 'transparent';
+    bgOverlay.style.backgroundImage = 'none';
+    bgOverlay.style.backgroundColor = '#ffffff';
+    bgOverlay.style.opacity = backgroundOpacity.value;
+  } else if (backgroundType.value === 'default') {
+    bgOverlay.style.backgroundImage = `url(/images/alfajr.png)`;
+    bgOverlay.style.backgroundColor = 'transparent';
+    bgOverlay.style.opacity = backgroundOpacity.value;
+  } else if (bgImageSrc) {
+    bgOverlay.style.backgroundImage = `url(${bgImageSrc})`;
+    bgOverlay.style.backgroundColor = 'transparent';
+    bgOverlay.style.opacity = backgroundOpacity.value;
   }
 
   // Orientation
@@ -105,11 +106,19 @@ function printPoster() {
   const width = orientation === 'landscape' ? '297mm' : '210mm';
   const height = orientation === 'landscape' ? '210mm' : '297mm';
 
+  const bgUrl =
+    backgroundType.value === 'default'
+      ? '/images/alfajr.png'
+      : bgImageSrc || '';
+
+  const bgColor = backgroundType.value === 'white' ? '#ffffff' : 'transparent';
+  const bgStyle = bgUrl ? `url('${bgUrl}')` : bgColor;
+
   const printWindow = window.open('', '_blank');
   printWindow.document.write(`
     <html>
       <head>
-        <title>Poster Print</title>
+        <title>طباعة البوستر</title>
         <style>
           @page {
             size: A4 ${orientation === 'landscape' ? 'landscape' : 'portrait'};
@@ -129,13 +138,13 @@ function printPoster() {
             align-items: center;
             text-align: center;
             font-family: Arial, sans-serif;
-            background-image: url('${bgImageSrc}');
+            background-image: ${bgStyle};
             background-size: cover;
             background-position: center;
-            opacity: ${backgroundOpacity.value};
             color: black;
             page-break-inside: avoid;
             position: relative;
+            background-color: ${backgroundType.value === 'white' ? '#ffffff' : 'transparent'};
           }
           .content {
             z-index: 1;
@@ -162,12 +171,13 @@ function printPoster() {
           <div class="content">
             <h1>${titleInput.value}</h1>
             <p>${productInput.value || "اسم المادة"}</p>
-            <p>${priceInput.value ? `${priceInput.value} د.ك` : "السعر"}</p>
+            <p class="price">${priceInput.value ? `${priceInput.value} د.ع` : "السعر"}</p>
           </div>
         </div>
       </body>
     </html>
   `);
+
   printWindow.document.close();
   printWindow.focus();
 
@@ -177,5 +187,4 @@ function printPoster() {
   }, 250);
 }
 
-// Initial Preview
 updatePreview();
