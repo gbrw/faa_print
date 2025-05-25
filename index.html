@@ -3,68 +3,95 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>منشئ بوسترات إعلانية</title>
+  <title>الفجر - طباعة عروض</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <div class="container">
-    <h1>مُنشئ وطباعة البوسترات الإعلانية</h1>
+    <h1>الفجر - طباعة عروض</h1>
 
-    <div class="form-group">
-      <label>العنوان (عرض خاص)</label>
-      <input type="text" id="title" value="عرض خاص" />
+    <!-- Form -->
+    <div class="form-container">
+      <div class="form-group">
+        <label>العنوان (عرض خاص)</label>
+        <input type="text" id="title" value="عرض خاص" placeholder="أدخل العنوان هنا" />
+      </div>
 
-      <label>اسم المادة</label>
-      <input type="text" id="product" placeholder="أدخل اسم المادة" />
+      <div class="form-group">
+        <label>اسم المادة</label>
+        <input type="text" id="product" placeholder="أدخل اسم المادة" />
+      </div>
 
-      <label>السعر</label>
-      <input type="text" id="price" placeholder="أدخل السعر" />
+      <div class="form-group">
+        <label>السعر</label>
+        <input type="text" id="price" placeholder="أدخل السعر" />
+      </div>
 
-      <label>اتجاه الطباعة</label>
-      <select id="orientation">
-        <option value="portrait">عمودي</option>
-        <option value="landscape">أفقي</option>
-      </select>
+      <div class="form-group">
+        <label>اتجاه الطباعة</label>
+        <select id="orientation">
+          <option value="portrait">عمودي</option>
+          <option value="landscape">أفقي</option>
+        </select>
+      </div>
 
-      <label>حجم خط العنوان: <span id="titleFontSizeVal">24</span>pt</label>
-      <input type="range" min="8" max="100" value="24" id="titleFontSize" />
+      <div class="form-group">
+        <label>حجم خط العنوان: <span id="titleFontSizeVal">24</span>pt</label>
+        <input type="range" min="8" max="100" value="24" id="titleFontSize" />
+      </div>
 
-      <label>لون العنوان</label>
-      <input type="color" id="titleColor" value="#000000" />
+      <div class="form-group">
+        <label>لون العنوان</label>
+        <input type="color" id="titleColor" value="#000000" />
+      </div>
 
-      <label>حجم خط المادة: <span id="productFontSizeVal">18</span>pt</label>
-      <input type="range" min="8" max="100" value="18" id="productFontSize" />
+      <div class="form-group">
+        <label>حجم خط المادة: <span id="productFontSizeVal">18</span>pt</label>
+        <input type="range" min="8" max="100" value="18" id="productFontSize" />
+      </div>
 
-      <label>لون المادة</label>
-      <input type="color" id="productColor" value="#000000" />
+      <div class="form-group">
+        <label>لون المادة</label>
+        <input type="color" id="productColor" value="#000000" />
+      </div>
 
-      <label>حجم خط السعر: <span id="priceFontSizeVal">20</span>pt</label>
-      <input type="range" min="8" max="100" value="20" id="priceFontSize" />
+      <div class="form-group">
+        <label>حجم خط السعر: <span id="priceFontSizeVal">20</span>pt</label>
+        <input type="range" min="8" max="100" value="20" id="priceFontSize" />
+      </div>
 
-      <label>لون السعر</label>
-      <input type="color" id="priceColor" value="#e53e3e" />
+      <div class="form-group">
+        <label>لون السعر</label>
+        <input type="color" id="priceColor" value="#e53e3e" />
+      </div>
 
-      <label>نوع الخلفية</label>
-      <select id="backgroundType">
-        <option value="default">الخلفية الافتراضية</option>
-        <option value="white">لا شيء - خلفية بيضاء</option>
-        <option value="custom">اختر صورة خاصة</option>
-      </select>
+      <div class="form-group">
+        <label>نوع الخلفية</label>
+        <select id="backgroundType">
+          <option value="default">الخلفية الافتراضية</option>
+          <option value="white">لا شيء - خلفية بيضاء</option>
+          <option value="custom">اختر صورة خاصة</option>
+        </select>
+      </div>
 
-      <div id="customBackgroundInput" style="display:none;">
+      <div class="form-group" id="customBackgroundInput" style="display:none;">
         <label>اختر صورة للخلفية</label>
         <input type="file" id="backgroundImage" accept="image/*" />
       </div>
 
-      <label>شفافية الخلفية: <span id="opacityVal">30</span>%</label>
-      <input type="range" min="0" max="1" step="0.01" value="0.3" id="backgroundOpacity" />
+      <div class="form-group">
+        <label>شفافية الخلفية: <span id="opacityVal">30</span>%</label>
+        <input type="range" min="0" max="1" step="0.01" value="0.3" id="backgroundOpacity" />
+      </div>
 
-      <button onclick="printPoster()">🖨️ طباعة بصيغة A4</button>
+      <button onclick="printPoster()" class="btn-print">🖨️ طباعة بصيغة A4</button>
     </div>
 
+    <!-- Preview -->
     <div class="preview-container">
-      <div id="posterPreview" class="poster">
+      <div id="posterPreview" class="poster portrait">
+        <div class="bg-overlay"></div>
         <div class="content">
           <h1 id="previewTitle">عرض خاص</h1>
           <p id="previewProduct">اسم المادة</p>
@@ -72,6 +99,11 @@
         </div>
       </div>
     </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>تصميم من قبل: <strong>غيث الراوي</strong></p>
+    </footer>
   </div>
 
   <script src="script.js"></script>
