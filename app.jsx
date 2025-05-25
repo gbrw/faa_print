@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react';
+const { useState, useRef } = React;
 
-export default function App() {
+function App() {
   const [formData, setFormData] = useState({
     title: 'عرض خاص',
     product: '',
@@ -147,306 +147,84 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">مُنشئ وطباعة البوسترات الإعلانية</h1>
+    <div style={{ maxWidth: '1000px', margin: 'auto' }}>
+      <h1 style={{ textAlign: 'center', marginBottom: '20px' }}>مُنشئ وطباعة البوسترات الإعلانية</h1>
 
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="grid md:grid-cols-2 gap-8 p-6">
-            {/* Form Section */}
-            <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">العنوان (عرض خاص)</label>
-                <input
-                  type="text"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleInputChange}
-                  placeholder="عرض خاص"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+      <div style={{ backgroundColor: '#fff', padding: '20px', borderRadius: '10px', boxShadow: '0 0 10px #ccc' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          {/* الحقول */}
+          <input name="title" value={formData.title} onChange={handleInputChange} placeholder="العنوان" />
+          <input name="product" value={formData.product} onChange={handleInputChange} placeholder="اسم المادة" />
+          <input name="price" value={formData.price} onChange={handleInputChange} placeholder="السعر" />
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">اسم المادة</label>
-                <input
-                  type="text"
-                  name="product"
-                  value={formData.product}
-                  onChange={handleInputChange}
-                  placeholder="أدخل اسم المادة"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+          <select name="orientation" value={formData.orientation} onChange={handleInputChange}>
+            <option value="portrait">عمودي</option>
+            <option value="landscape">أفقي</option>
+          </select>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">السعر</label>
-                <input
-                  type="text"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  placeholder="أدخل السعر"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+          {/* حجم الخطوط */}
+          <label>حجم خط العنوان: <input type="number" name="titleFontSize" value={parseInt(formData.titleFontSize)} onChange={(e) => setFormData({...formData, titleFontSize: `${e.target.value}pt`})} min="8" max="100" /> pt</label>
+          <label>حجم خط المادة: <input type="number" name="productFontSize" value={parseInt(formData.productFontSize)} onChange={(e) => setFormData({...formData, productFontSize: `${e.target.value}pt`})} min="8" max="100" /> pt</label>
+          <label>حجم خط السعر: <input type="number" name="priceFontSize" value={parseInt(formData.priceFontSize)} onChange={(e) => setFormData({...formData, priceFontSize: `${e.target.value}pt`})} min="8" max="100" /> pt</label>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">اتجاه الطباعة</label>
-                <select
-                  name="orientation"
-                  value={formData.orientation}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="portrait">عمودي</option>
-                  <option value="landscape">أفقي</option>
-                </select>
-              </div>
+          {/* ألوان النصوص */}
+          <label>لون العنوان: <input type="color" name="titleColor" value={formData.titleColor} onChange={handleInputChange} /></label>
+          <label>لون المادة: <input type="color" name="productColor" value={formData.productColor} onChange={handleInputChange} /></label>
+          <label>لون السعر: <input type="color" name="priceColor" value={formData.priceColor} onChange={handleInputChange} /></label>
 
-              <div className="mt-4 space-y-4">
-                <h3 className="font-semibold text-gray-700">خصائص النصوص:</h3>
+          {/* الخلفية */}
+          <select name="backgroundType" value={formData.backgroundType} onChange={handleInputChange}>
+            <option value="default">الخلفية الافتراضية</option>
+            <option value="white">لا شيء - خلفية بيضاء</option>
+            <option value="custom">اختر صورة خاصة</option>
+          </select>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">حجم خط العنوان</label>
-                  <div className="flex items-center">
-                    <input
-                      type="number"
-                      name="titleFontSize"
-                      value={parseInt(formData.titleFontSize)}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          titleFontSize: `${e.target.value}pt`,
-                        })
-                      }
-                      min="8"
-                      max="100"
-                      step="1"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span className="mr-2 text-gray-500">pt</span>
-                  </div>
-                </div>
+          {formData.backgroundType === 'custom' && (
+            <input type="file" accept="image/*" onChange={handleFileChange} />
+          )}
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">لون العنوان</label>
-                  <input
-                    type="color"
-                    name="titleColor"
-                    value={formData.titleColor}
-                    onChange={handleInputChange}
-                    className="w-full h-10 cursor-pointer"
-                  />
-                </div>
+          <label>شفافية الخلفية: {Math.round(formData.backgroundOpacity * 100)}% 
+            <input type="range" name="backgroundOpacity" min="0" max="1" step="0.01" value={formData.backgroundOpacity} onChange={handleInputChange} />
+          </label>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">حجم خط المادة</label>
-                  <div className="flex items-center">
-                    <input
-                      type="number"
-                      name="productFontSize"
-                      value={parseInt(formData.productFontSize)}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          productFontSize: `${e.target.value}pt`,
-                        })
-                      }
-                      min="8"
-                      max="100"
-                      step="1"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span className="mr-2 text-gray-500">pt</span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">لون المادة</label>
-                  <input
-                    type="color"
-                    name="productColor"
-                    value={formData.productColor}
-                    onChange={handleInputChange}
-                    className="w-full h-10 cursor-pointer"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">حجم خط السعر</label>
-                  <div className="flex items-center">
-                    <input
-                      type="number"
-                      name="priceFontSize"
-                      value={parseInt(formData.priceFontSize)}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          priceFontSize: `${e.target.value}pt`,
-                        })
-                      }
-                      min="8"
-                      max="100"
-                      step="1"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <span className="mr-2 text-gray-500">pt</span>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">لون السعر</label>
-                  <input
-                    type="color"
-                    name="priceColor"
-                    value={formData.priceColor}
-                    onChange={handleInputChange}
-                    className="w-full h-10 cursor-pointer"
-                  />
-                </div>
-              </div>
-
-              <div className="mt-4 space-y-4">
-                <h3 className="font-semibold text-gray-700">اختيار الخلفية:</h3>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">نوع الخلفية</label>
-                  <select
-                    name="backgroundType"
-                    value={formData.backgroundType}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="default">الخلفية الافتراضية</option>
-                    <option value="white">لا شيء - خلفية بيضاء</option>
-                    <option value="custom">اختر صورة خاصة</option>
-                  </select>
-                </div>
-
-                {formData.backgroundType === 'custom' && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">اختر صورة للخلفية</label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileChange}
-                      className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4
-                                 file:rounded-md file:border-0
-                                 file:text-sm file:font-semibold
-                                 file:bg-blue-50 file:text-blue-700
-                                 hover:file:bg-blue-100"
-                    />
-                  </div>
-                )}
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    شفافية الخلفية ({(parseFloat(formData.backgroundOpacity) * 100).toFixed(0)}%)
-                  </label>
-                  <input
-                    type="range"
-                    name="backgroundOpacity"
-                    min="0"
-                    max="1"
-                    step="0.01"
-                    value={formData.backgroundOpacity}
-                    onChange={handleInputChange}
-                    className="w-full accent-blue-600"
-                  />
-                  <div className="flex justify-between text-xs text-gray-500 mt-1">
-                    <span>شفاف</span>
-                    <span>كامل</span>
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setPreviewBackground('/images/alfajr.png');
-                    setFormData(prev => ({
-                      ...prev,
-                      backgroundType: 'default',
-                      backgroundOpacity: '0.3',
-                      backgroundImageFile: null
-                    }));
-                  }}
-                  className="mt-2 text-sm text-blue-600 hover:underline"
-                >
-                  استعادة الصورة الافتراضية
-                </button>
-              </div>
-
-              <button
-                onClick={handlePrint}
-                className="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-md transition duration-200 flex items-center justify-center"
-              >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm0 0V7"></path>
-                </svg>
-                طباعة بصيغة A4
-              </button>
-            </div>
-
-            {/* Poster Preview */}
-            <div className="hidden md:block">
-              <div 
-                ref={posterRef} 
-                className={`border rounded-lg overflow-hidden relative mx-auto`}
-                style={{
-                  width: formData.orientation === 'landscape' ? '297mm' : '210mm',
-                  height: formData.orientation === 'landscape' ? '210mm' : '297mm',
-                  backgroundColor: formData.backgroundType === 'white' ? '#ffffff' : undefined,
-                  backgroundImage: previewBackground ? `url(${previewBackground})` : 'none',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  opacity: formData.backgroundType === 'white' ? 1 : formData.backgroundOpacity,
-                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                }}
-              >
-                {/* Text Overlay */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center p-8 text-center" style={{ zIndex: 1 }}>
-                  <h1 
-                    className="title font-bold" 
-                    style={{
-                      fontSize: formData.titleFontSize,
-                      color: formData.titleColor
-                    }}
-                  >
-                    {formData.title || "عرض خاص"}
-                  </h1>
-                  <p 
-                    className="product mt-4" 
-                    style={{
-                      fontSize: formData.productFontSize,
-                      color: formData.productColor
-                    }}
-                  >
-                    {formData.product || "اسم المادة"}
-                  </p>
-                  <p 
-                    className="price mt-2" 
-                    style={{
-                      fontSize: formData.priceFontSize,
-                      color: formData.priceColor
-                    }}
-                  >
-                    {formData.price ? `${formData.price} د.ك` : "السعر"}
-                  </p>
-                </div>
-              </div>
-              
-              <p className="mt-4 text-sm text-gray-500 text-center">
-                معاينة بصيغة A4 {formData.orientation === 'landscape' ? '(أفقي)' : '(عمودي)'}
-              </p>
-            </div>
-          </div>
+          <button onClick={handlePrint} style={{ padding: '10px', backgroundColor: '#3b82f6', color: '#fff', border: 'none', borderRadius: '5px' }}>
+            طباعة بصيغة A4
+          </button>
         </div>
 
-        <div className="mt-8 text-center text-sm text-gray-500">
-          <p>CopyRight Ghaith Alrawi</p>
+        {/* معاينة */}
+        <div style={{
+          marginTop: '30px',
+          width: formData.orientation === 'landscape' ? '297mm' : '210mm',
+          height: formData.orientation === 'landscape' ? '210mm' : '297mm',
+          backgroundColor: formData.backgroundType === 'white' ? '#fff' : undefined,
+          backgroundImage: previewBackground ? `url(${previewBackground})` : 'none',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          border: '1px solid #ccc',
+          margin: 'auto',
+          position: 'relative',
+          opacity: formData.backgroundType === 'white' ? 1 : formData.backgroundOpacity
+        }}>
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            textAlign: 'center',
+            zIndex: 1,
+            color: '#000'
+          }}>
+            <h1 style={{ fontSize: formData.titleFontSize, color: formData.titleColor }}>{formData.title || "عرض خاص"}</h1>
+            <p style={{ fontSize: formData.productFontSize, color: formData.productColor }}>{formData.product || "اسم المادة"}</p>
+            <p style={{ fontSize: formData.priceFontSize, color: formData.priceColor }}>{formData.price ? `${formData.price} د.ك` : "السعر"}</p>
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
