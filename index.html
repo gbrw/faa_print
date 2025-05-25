@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>الفجر - طباعة عروض</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- مكتبات لدعم التصدير -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js "></script>
+  <!-- مكتبات التصدير -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js "></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js "></script>
 </head>
 <body>
 
@@ -93,16 +93,9 @@
       <button onclick="downloadPosterAsPDF()" class="btn-pdf">📄 تنزيل بصيغة PDF</button>
     </div>
 
-    <!-- Poster Preview -->
+    <!-- Canvas Preview -->
     <div class="preview-container">
-      <div id="posterPreview" class="poster landscape">
-        <div class="bg-overlay"></div>
-        <div class="content">
-          <h1 id="previewTitle">عرض خاص</h1>
-          <p id="previewProduct">اسم المادة</p>
-          <p id="previewPrice">السعر</p>
-        </div>
-      </div>
+      <canvas id="posterPreview" width="300" height="424" style="border: 2px dashed #ccc;"></canvas>
     </div>
 
     <!-- Footer -->
