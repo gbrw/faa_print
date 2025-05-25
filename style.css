@@ -58,7 +58,9 @@ h1 {
   box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
-.btn-print {
+.btn-print,
+.btn-download,
+.btn-pdf {
   background-color: #3b82f6;
   color: white;
   border: none;
@@ -71,6 +73,18 @@ h1 {
 }
 .btn-print:hover {
   background-color: #2563eb;
+}
+.btn-download {
+  background-color: #10b981;
+}
+.btn-download:hover {
+  background-color: #059669;
+}
+.btn-pdf {
+  background-color: #f59e0b;
+}
+.btn-pdf:hover {
+  background-color: #d97706;
 }
 
 .preview-container {
@@ -114,6 +128,7 @@ h1 {
   z-index: 1;
   position: relative;
   padding: 20px;
+  text-align: center;
 }
 
 .footer {
