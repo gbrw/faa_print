@@ -17,7 +17,7 @@ body {
   padding: 20px;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
   margin-top: 20px;
 }
 
@@ -91,11 +91,6 @@ h1 {
   border: 2px dashed #ccc;
   background-color: white;
   transition: all 0.3s ease;
-}
-
-.poster.portrait {
-  width: 210mm;
-  height: 297mm;
 }
 
 .poster.landscape {
