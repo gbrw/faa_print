@@ -68,7 +68,7 @@ backgroundOpacity.addEventListener('input', () => {
   updateCanvas();
 });
 
-// --- Update Canvas Preview ---
+// --- تحديث المعاينة المباشرة ---
 function updateCanvas() {
   const isLandscape = orientationSelect.value === 'landscape';
 
@@ -139,21 +139,26 @@ function drawText(ctx, width, height) {
   ctx.textBaseline = 'middle';
 
   // العنوان
-  ctx.font = `${parseInt(titleFontSize.value) * 0.17}px Cairo, Arial, sans-serif`;
+  ctx.font = `${parseInt(titleFontSize.value) * scaleFont()}px Cairo, Arial, sans-serif`;
   ctx.fillStyle = titleColor.value;
   ctx.fillText(titleInput.value || 'عرض خاص', centerX, centerY - 60);
 
   // اسم المادة
-  ctx.font = `${parseInt(productFontSize.value) * 0.17}px Cairo, Arial, sans-serif`;
+  ctx.font = `${parseInt(productFontSize.value) * scaleFont()}px Cairo, Arial, sans-serif`;
   ctx.fillStyle = productColor.value;
   ctx.fillText(productInput.value || 'اسم المادة', centerX, centerY);
 
   // السعر
-  ctx.font = `${parseInt(priceFontSize.value) * 0.17}px Cairo, Arial, sans-serif`;
+  ctx.font = `${parseInt(priceFontSize.value) * scaleFont()}px Cairo, Arial, sans-serif`;
   ctx.fillStyle = priceColor.value;
   ctx.fillText(priceInput.value ? `${priceInput.value} د.ع` : 'السعر', centerX, centerY + 60);
 }
 
+function scaleFont() {
+  return 0.17;
+}
+
+// --- إنشاء Canvas بدقة A4 حقيقية ---
 async function generateA4Canvas(resolve, isLandscape = false) {
   const DPI = 300;
   const MM_TO_INCH = 0.0393701;
@@ -236,6 +241,7 @@ async function generateA4Canvas(resolve, isLandscape = false) {
 
   resolve(canvas);
 }
+
 // --- زر الطباعة ---
 function printPoster() {
   const isLandscape = orientationSelect.value === 'landscape';
@@ -277,7 +283,8 @@ function printPoster() {
     printWindow.document.close();
   });
 }
-// --- زر التنزيل كصورة ---
+
+// --- تنزيل كصورة ---
 function downloadPosterAsImage() {
   const isLandscape = orientationSelect.value === 'landscape';
 
@@ -289,7 +296,7 @@ function downloadPosterAsImage() {
   });
 }
 
-// --- زر التنزيل كـ PDF ---
+// --- تنزيل كـ PDF ---
 function downloadPosterAsPDF() {
   const isLandscape = orientationSelect.value === 'landscape';
 
@@ -306,3 +313,6 @@ function downloadPosterAsPDF() {
     pdf.save('poster.pdf');
   });
 }
+
+// --- تحديث المعاينة الأولية ---
+updateCanvas();
