@@ -7,16 +7,73 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="root"></div>
 
-  <!-- React و ReactDOM -->
-  <script src="https://unpkg.com/react @18/umd/react.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom @18/umd/react-dom.development.js" crossorigin></script>
+  <div class="container">
+    <h1>مُنشئ وطباعة البوسترات الإعلانية</h1>
 
-  <!-- Babel لتحويل JSX -->
-  <script src="https://unpkg.com/ @babel/standalone/babel.min.js"></script>
+    <div class="form-group">
+      <label>العنوان (عرض خاص)</label>
+      <input type="text" id="title" value="عرض خاص" />
 
-  <!-- كود التطبيق -->
-  <script type="text/babel" src="script.jsx"></script>
+      <label>اسم المادة</label>
+      <input type="text" id="product" placeholder="أدخل اسم المادة" />
+
+      <label>السعر</label>
+      <input type="text" id="price" placeholder="أدخل السعر" />
+
+      <label>اتجاه الطباعة</label>
+      <select id="orientation">
+        <option value="portrait">عمودي</option>
+        <option value="landscape">أفقي</option>
+      </select>
+
+      <label>حجم خط العنوان: <span id="titleFontSizeVal">24</span>pt</label>
+      <input type="range" min="8" max="100" value="24" id="titleFontSize" />
+
+      <label>لون العنوان</label>
+      <input type="color" id="titleColor" value="#000000" />
+
+      <label>حجم خط المادة: <span id="productFontSizeVal">18</span>pt</label>
+      <input type="range" min="8" max="100" value="18" id="productFontSize" />
+
+      <label>لون المادة</label>
+      <input type="color" id="productColor" value="#000000" />
+
+      <label>حجم خط السعر: <span id="priceFontSizeVal">20</span>pt</label>
+      <input type="range" min="8" max="100" value="20" id="priceFontSize" />
+
+      <label>لون السعر</label>
+      <input type="color" id="priceColor" value="#e53e3e" />
+
+      <label>نوع الخلفية</label>
+      <select id="backgroundType">
+        <option value="default">الخلفية الافتراضية</option>
+        <option value="white">لا شيء - خلفية بيضاء</option>
+        <option value="custom">اختر صورة خاصة</option>
+      </select>
+
+      <div id="customBackgroundInput" style="display:none;">
+        <label>اختر صورة للخلفية</label>
+        <input type="file" id="backgroundImage" accept="image/*" />
+      </div>
+
+      <label>شفافية الخلفية: <span id="opacityVal">30</span>%</label>
+      <input type="range" min="0" max="1" step="0.01" value="0.3" id="backgroundOpacity" />
+
+      <button onclick="printPoster()">🖨️ طباعة بصيغة A4</button>
+    </div>
+
+    <div class="preview-container">
+      <div id="posterPreview" class="poster">
+        <div class="content">
+          <h1 id="previewTitle">عرض خاص</h1>
+          <p id="previewProduct">اسم المادة</p>
+          <p id="previewPrice">السعر</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
