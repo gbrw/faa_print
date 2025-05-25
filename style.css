@@ -1,8 +1,66 @@
-body {
-  margin: 0;
-  font-family: sans-serif;
+* {
+  box-sizing: border-box;
 }
 
-#root {
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f1f1f1;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-group input,
+.form-group select,
+.form-group button {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.preview-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.poster {
+  position: relative;
+  width: 210mm;
+  height: 297mm;
+  background-color: white;
+  background-size: cover;
+  background-position: center;
+  border: 2px dashed #ccc;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: black;
+  transition: all 0.3s ease;
+}
+
+.poster.portrait {
+  width: 210mm;
+  height: 297mm;
+}
+
+.poster.landscape {
+  width: 297mm;
+  height: 210mm;
+}
+
+.poster .content {
+  z-index: 1;
   padding: 20px;
 }
