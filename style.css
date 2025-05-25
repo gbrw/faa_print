@@ -99,12 +99,18 @@ h1 {
   height: 297mm;
   overflow: hidden;
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   text-align: center;
   border: 2px dashed #ccc;
   background-color: white;
   transition: all 0.3s ease;
+}
+
+.poster.landscape {
+  width: 297mm;
+  height: 210mm;
 }
 
 .footer {
