@@ -32,23 +32,23 @@
         <label>اتجاه الطباعة</label>
         <select id="orientation">
           <option value="portrait">عمودي</option>
-          <option value="landscape">أفقي</option>
+          <option value="landscape" selected>أفقي</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>حجم خط العنوان: <span id="titleFontSizeVal">24</span>pt</label>
-        <input type="range" min="8" max="100" value="24" id="titleFontSize" />
+        <label>حجم خط العنوان: <span id="titleFontSizeVal">100</span>pt</label>
+        <input type="range" min="8" max="100" value="100" id="titleFontSize" />
       </div>
 
       <div class="form-group">
         <label>لون العنوان</label>
-        <input type="color" id="titleColor" value="#000000" />
+        <input type="color" id="titleColor" value="#e53e3e" />
       </div>
 
       <div class="form-group">
-        <label>حجم خط المادة: <span id="productFontSizeVal">18</span>pt</label>
-        <input type="range" min="8" max="100" value="18" id="productFontSize" />
+        <label>حجم خط المادة: <span id="productFontSizeVal">60</span>pt</label>
+        <input type="range" min="8" max="100" value="60" id="productFontSize" />
       </div>
 
       <div class="form-group">
@@ -57,8 +57,8 @@
       </div>
 
       <div class="form-group">
-        <label>حجم خط السعر: <span id="priceFontSizeVal">20</span>pt</label>
-        <input type="range" min="8" max="100" value="20" id="priceFontSize" />
+        <label>حجم خط السعر: <span id="priceFontSizeVal">100</span>pt</label>
+        <input type="range" min="8" max="100" value="100" id="priceFontSize" />
       </div>
 
       <div class="form-group">
@@ -81,8 +81,8 @@
       </div>
 
       <div class="form-group">
-        <label>شفافية الخلفية: <span id="opacityVal">30</span>%</label>
-        <input type="range" min="0" max="1" step="0.01" value="0.3" id="backgroundOpacity" />
+        <label>شفافية الخلفية: <span id="opacityVal">15</span>%</label>
+        <input type="range" min="0" max="1" step="0.01" value="0.15" id="backgroundOpacity" />
       </div>
 
       <button onclick="printPoster()" class="btn-print">🖨️ طباعة بصيغة A4</button>
@@ -90,7 +90,7 @@
 
     <!-- Poster Preview -->
     <div class="preview-container">
-      <div id="posterPreview" class="poster portrait">
+      <div id="posterPreview" class="poster landscape">
         <div class="bg-overlay"></div>
         <div class="content">
           <h1 id="previewTitle">عرض خاص</h1>
