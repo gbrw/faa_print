@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>الفجر - طباعة عروض</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- مكتبات لدعم التصدير -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js "></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js "></script>
 </head>
 <body>
 
@@ -86,6 +89,8 @@
       </div>
 
       <button onclick="printPoster()" class="btn-print">🖨️ طباعة بصيغة A4</button>
+      <button onclick="downloadPosterAsImage()" class="btn-download">📥 تنزيل كصورة</button>
+      <button onclick="downloadPosterAsPDF()" class="btn-pdf">📄 تنزيل بصيغة PDF</button>
     </div>
 
     <!-- Poster Preview -->
