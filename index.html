@@ -40,7 +40,6 @@
             background: #2980b9;
         }
         
-        /* Loading overlay styles */
         #loading-overlay {
             position: fixed;
             top: 0;
@@ -79,7 +78,6 @@
             border-top: 4px solid #3498db;
         }
         
-        /* تحسينات الحاوية الرئيسية للأجهزة المحمولة */
         @media (max-width: 768px) {
             .container {
                 margin: 5px auto 20px auto;
@@ -89,12 +87,10 @@
                 box-sizing: border-box;
             }
             
-            /* تحسين العرض العام للصفحة */
             body {
                 padding: 8px 0;
             }
             
-            /* تنقل أفضل لمناطق التطبيق */
             .text-section {
                 scroll-margin-top: 15px;
             }
@@ -138,7 +134,6 @@
             filter: drop-shadow(0 8px 15px rgba(0,0,0,0.2));
         }
         
-        /* تحسينات للجوال */
         @media (max-width: 768px) {
             .logo-container {
                 padding-bottom: 15px;
@@ -207,10 +202,9 @@
             transform: translateY(-1px);
         }
         
-        /* تحسينات إضافية للنصوص على الأجهزة المحمولة */
         @media (max-width: 768px) {
             textarea {
-                font-size: 16px; /* منع تكبير الصفحة عند التركيز على الهاتف */
+                font-size: 16px; 
                 padding: 10px 12px;
                 min-height: 60px;
                 margin-bottom: 10px;
@@ -221,7 +215,6 @@
                 transform: none;
             }
             
-            /* تحسينات عامة للخطوط */
             body {
                 font-size: 15px;
             }
@@ -288,7 +281,6 @@
             transform: translateY(1px);
         }
         
-        /* تحسينات للأزرار على الهواتف المحمولة */
         @media (max-width: 768px) {
             button {
                 padding: 12px 20px;
@@ -355,7 +347,6 @@
             opacity: 0.7;
         }
         
-        /* تحسين مظهر الأزرار للهواتف المحمولة */
         @media (max-width: 768px) {
             .buttons {
                 flex-direction: column;
@@ -375,7 +366,6 @@
                 transform: scale(0.98);
             }
             
-            /* زر ثابت للطباعة في الأسفل على الهواتف المحمولة */
             #print-btn {
                 position: sticky;
                 bottom: 15px;
@@ -399,14 +389,13 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             padding: 15mm;
             box-sizing: border-box;
-            display: block; /* Show preview by default */
+            display: block; 
             position: relative;
             border: 1px solid #ddd;
             z-index: 1;
             transition: all 0.3s ease;
         }
         
-        /* تم إزالة تأثير ::before للحصول على معاينة أكثر واقعية */
         
         @keyframes previewHighlight {
             0% { box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2), 0 5px 10px rgba(0, 0, 0, 0.1); }
@@ -418,7 +407,6 @@
             animation: previewHighlight 1s ease;
         }
         
-        /* تحسينات المعاينة للأجهزة المحمولة */
         @media (max-width: 768px) {
             .preview {
                 width: 100%;
@@ -426,7 +414,7 @@
                 margin: 30px auto;
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
                 transform-origin: center top;
-                overflow: hidden; /* منع تجاوز المحتوى */
+                overflow: hidden; 
                 box-sizing: border-box;
             }
             
@@ -434,9 +422,9 @@
                 width: 100%;
                 max-width: 95%;
                 height: auto;
-                aspect-ratio: 1.414 / 1; /* نسبة أبعاد A4 */
+                aspect-ratio: 1.414 / 1;
                 box-sizing: border-box;
-                overflow: hidden; /* منع تجاوز المحتوى */
+                overflow: hidden; 
             }
         }
         
@@ -445,7 +433,7 @@
                 margin: 20px auto;
                 padding: 10mm;
                 box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-                overflow: hidden; /* منع تجاوز المحتوى */
+                overflow: hidden; 
                 box-sizing: border-box;
             }
         }.preview-text {
@@ -464,7 +452,6 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
         }
         
-        /* تحسينات نصوص المعاينة للأجهزة المحمولة */
         @media (max-width: 768px) {
             .preview-text {
                 margin-bottom: 8mm;
@@ -479,15 +466,13 @@
                 text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
             }
             
-            /* تحسين أداء المقياس للأجهزة المحمولة */
             .preview.landscape {
                 transform-origin: top center;
                 transform: scale(0.92);
-                max-height: calc(100vh - 120px); /* تحديد الارتفاع الأقصى لمنع الصفحات المتعددة */
+                max-height: calc(100vh - 120px); 
                 overflow: hidden;
             }
             
-            /* تعديل تباعد النص مع بعضه */
             #preview-text1 {
                 margin-bottom: 5mm;
             }
@@ -501,7 +486,6 @@
             }
         }
         
-        /* تحسينات للأجهزة شديدة الصغر */
         @media (max-width: 480px) {
             .preview.landscape {
                 transform: scale(0.85);
@@ -512,7 +496,7 @@
             
             .preview-text {
                 margin-bottom: 5mm;
-                font-size: 95%; /* تقليل حجم الخط للأجهزة الأصغر */
+                font-size: 95%; 
             }
         }.font-controls {
             margin-bottom: 20px;
@@ -548,7 +532,6 @@
             background-image: linear-gradient(to bottom, #ffffff, #f0f8ff);
         }
         
-        /* تحسينات أقسام النص للأجهزة المحمولة */
         @media (max-width: 768px) {
             .text-section {
                 padding: 15px;
@@ -694,7 +677,6 @@
             -webkit-tap-highlight-color: transparent;
         }
         
-        /* تحسين مظهر لوحة الألوان للهواتف المحمولة */
         @media (max-width: 768px) {
             .color-presets {
                 display: grid;
@@ -800,7 +782,6 @@
             margin-bottom: 10px;
         }
         
-        /* تحسينات قسم الإعدادات للهواتف المحمولة */
         @media (max-width: 768px) {
             .settings-controls {
                 padding: 12px;
@@ -837,7 +818,6 @@
                 margin-top: 8px;
             }
             
-            /* تحسين منطقة رفع الصور */
             .upload-container {
                 height: 70px;
                 margin-bottom: 10px;
@@ -959,7 +939,6 @@
             background-color: rgba(236, 240, 245, 0.5);
         }
 
-        /* تحسين مظهر اختيار الاتجاه للهواتف */
         @media (max-width: 768px) {
             .orientation-control .radio-group {
                 display: grid;
@@ -1167,11 +1146,10 @@
             }
         }
         
-        /* إضافة كلاس للاتجاه الأفقي */
         .preview.landscape {
             width: 297mm;
             height: 210mm;
-        }        /* تعديلات الطباعة الموحدة - حل مشكلة التكرار وضبط الاتجاه */        @media print {
+        }               @media print {
             @page {
                 size: A4 landscape;
                 margin: 0;
@@ -1229,7 +1207,6 @@
                 transform: none !important;
             }
             
-            /* منع الصفحات الإضافية */
             .mobile-navigation, .loading-overlay {
                 display: none !important;
             }
@@ -1247,7 +1224,6 @@
             border: 1px solid #eaeaea;
         }
 
-        /* إضافة أزرار التنقل للهواتف المحمولة */
         @media (max-width: 768px) {
             .mobile-navigation {
                 position: fixed;
@@ -1571,7 +1547,6 @@
         <div class="preview-text" id="preview-text3"></div>
     </div>
     
-    <!-- أزرار التنقل للهواتف المحمولة -->
     <div class="mobile-navigation no-print" id="mobile-navigation" style="display: none;">
         <button class="mobile-nav-button" id="mobile-edit-btn">
             تعديل النص
@@ -1582,24 +1557,20 @@
     </div>
     
     <script>
-        // إضافة روابط الخطوط العربية
         const fontLink = document.createElement('link');
         fontLink.rel = 'stylesheet';
         fontLink.href = 'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;700&family=Droid+Arabic+Kufi:wght@400;700&family=Tajawal:wght@400;700&display=swap';
         document.head.appendChild(fontLink);
         
-        // مربعات النصوص
         const text1 = document.getElementById('text1');
         const text2 = document.getElementById('text2');
         const text3 = document.getElementById('text3');
         
-        // عناصر المعاينة
         const preview = document.getElementById('preview');
         const previewText1 = document.getElementById('preview-text1');
         const previewText2 = document.getElementById('preview-text2');
         const previewText3 = document.getElementById('preview-text3');
         
-        // خيارات التنسيق
         const fontFamily1 = document.getElementById('font-family1');
         const fontFamily2 = document.getElementById('font-family2');
         const fontFamily3 = document.getElementById('font-family3');
@@ -1611,7 +1582,6 @@
         const fontColor3 = document.getElementById('font-color3');
         const textAlign = 'center';
         
-        // إعدادات إضافية
         const backgroundImage = document.getElementById('background-image');
         const backgroundOpacity = document.getElementById('background-opacity');
         const opacityValue = document.getElementById('opacity-value');
@@ -1622,26 +1592,20 @@
         const backgroundOptions = document.querySelectorAll('input[name="background-option"]');
         const customBackgroundOption = document.getElementById('custom-background-option');
         
-        // أزرار التحكم
         const previewBtn = document.getElementById('preview-btn');
         const printBtn = document.getElementById('print-btn');
         
-        // تفعيل الألوان عند الضغط عليها
         document.querySelectorAll('.color-preset').forEach(preset => {
             preset.addEventListener('click', function() {
                 const color = this.getAttribute('data-color');
                 const parent = this.closest('.color-control');
                 
-                // إزالة التفعيل من جميع الألوان في نفس المجموعة
                 parent.querySelectorAll('.color-preset').forEach(p => p.classList.remove('active'));
-                // تفعيل اللون المختار
                 this.classList.add('active');
 
                 if (parent.closest('.border-control')) {
-                    // إذا كان في قسم الإطار
                     borderColor.value = color;
                 } else {
-                    // إذا كان في أقسام النصوص
                     const section = parent.closest('.text-section');
                     const sectionIndex = Array.from(document.querySelectorAll('.text-section')).indexOf(section);
                     const fontColorInput = document.getElementById(`font-color${sectionIndex + 1}`);
@@ -1653,7 +1617,6 @@
             });
         });
 
-        // تحديث المعاينة
         function updatePreview() {
             previewText1.textContent = text1.value;
             previewText2.textContent = text2.value;
@@ -1663,7 +1626,6 @@
             const text2Size = fontSize2.value;
             const text3Size = fontSize3.value;
 
-            // تطبيق التنسيقات للنص الأول
             previewText1.style.marginBottom = Math.max(20, text1Size / 2) + 'px';
             previewText1.style.fontFamily = fontFamily1.value;
             previewText1.style.fontSize = text1Size + 'px';
@@ -1675,7 +1637,6 @@
             previewText1.style.zIndex = '2';
             previewText1.style.position = 'relative';
 
-            // تطبيق التنسيقات للنص الثاني
             previewText2.style.marginBottom = Math.max(20, text2Size / 2) + 'px';
             previewText2.style.fontFamily = fontFamily2.value;
             previewText2.style.fontSize = text2Size + 'px';
@@ -1687,7 +1648,6 @@
             previewText2.style.zIndex = '2';
             previewText2.style.position = 'relative';
 
-            // تطبيق التنسيقات للنص الثالث
             previewText3.style.marginBottom = Math.max(20, text3Size / 2) + 'px';
             previewText3.style.fontFamily = fontFamily3.value;
             previewText3.style.fontSize = text3Size + 'px';
@@ -1699,7 +1659,6 @@
             previewText3.style.zIndex = '2';
             previewText3.style.position = 'relative';
 
-            // تحديث خيارات الخلفية
             const selectedBackgroundOption = document.querySelector('input[name="background-option"]:checked').value;
             const opacity = backgroundOpacity.value;
             preview.style.backgroundColor = 'white';
@@ -1735,12 +1694,11 @@
                 preview.appendChild(backgroundDiv);
             }
 
-            // Remove any existing background divs except the current one
             preview.querySelectorAll('div').forEach(div => {
                 if (div !== backgroundDiv && div !== previewText1 && div !== previewText2 && div !== previewText3) {
                     div.remove();
                 }
-            });            // تطبيق الإطار
+            });            
             const selectedBorderStyle = borderStyle.value;
             const borderWidthValue = borderWidth.value;
             const selectedBorderColor = borderColor ? borderColor.value : '#000000';
@@ -1751,16 +1709,13 @@
                 preview.style.border = 'none';
             }
             
-            // تأكد من أن الإطار يظهر فوق الخلفية
             preview.style.position = 'relative';
             preview.style.zIndex = '1';
-        }        // زر الطباعة
+        }        
         printBtn.addEventListener('click', function(e) {
-            // منع السلوك الافتراضي إذا كان موجود
             e.preventDefault();
-            // استخدام دالة الطباعة المحسنة
             printPreview();
-        });        // تفعيل الخلفية المخصصة
+        });        
         backgroundOptions.forEach(option => {
             option.addEventListener('change', function() {
                 if (this.value === 'custom') {
@@ -1772,9 +1727,7 @@
             });
         });
         
-        // تعديل سلوك الطباعة للتأكد من ظهور الإطار وتناسق الصفحات
         window.addEventListener('beforeprint', function(event) {
-            // تطبيق الإطار بشكل قوي عند الطباعة
             const selectedBorderStyle = borderStyle.value || 'solid';
             if (selectedBorderStyle !== 'none') {
                 const borderWidthValue = borderWidth.value || '3';
@@ -1782,32 +1735,25 @@
                 preview.style.setProperty('border', `${borderWidthValue}px ${selectedBorderStyle} ${selectedBorderColor}`, 'important');
             }
             
-            // منع تجاوز الصفحة الواحدة
             preview.style.setProperty('overflow', 'hidden', 'important');
             preview.style.setProperty('page-break-after', 'avoid', 'important');
             preview.style.setProperty('page-break-inside', 'avoid', 'important');
             preview.style.setProperty('page-break-before', 'avoid', 'important');
             
-            // تعزيز توافق الطباعة على الهواتف
             if (window.matchMedia('(max-width: 768px)').matches) {
-                // تقليل المسافات بين النصوص للهواتف
                 previewText1.style.marginBottom = '4mm';
                 previewText2.style.marginBottom = '4mm';
                 previewText3.style.marginBottom = '0';
             }
         });
         
-        // إعادة ضبط الإعدادات بعد الطباعة
         window.addEventListener('afterprint', function() {
-            // إعادة تعيين الإعدادات التي قد تكون تغيرت أثناء الطباعة
             updatePreview();
             isPrinting = false;
         });
 
-        // تحديث المعاينة عند اختيار صورة مخصصة
         backgroundImage.addEventListener('change', updatePreview);
 
-        // تفعيل التحديث المباشر
         text1.addEventListener('input', updatePreview);
         text2.addEventListener('input', updatePreview);
         text3.addEventListener('input', updatePreview);
@@ -1832,20 +1778,18 @@
             updatePreview();
         });
 
-        // تحديث لون الإطار عند اختيار لون جديد
         document.querySelectorAll('.border-control .color-preset').forEach(preset => {
             preset.addEventListener('click', function() {
                 const color = this.getAttribute('data-color');
                 borderColor.value = color;
                 updatePreview();
             });
-        });        // تحديث اتجاه الصفحة
+        });        
         orientationRadios.forEach(radio => {
             radio.addEventListener('change', function() {
                 const orientation = this.value;
                 const styleSheet = document.styleSheets[0];
                 
-                // البحث عن قاعدة @page وتحديثها
                 for (let i = 0; i < styleSheet.cssRules.length; i++) {
                     const rule = styleSheet.cssRules[i];
                     if (rule.type === CSSRule.MEDIA_RULE && rule.conditionText.includes('print')) {
@@ -1863,7 +1807,6 @@
                     }
                 }
                 
-                // تحديث حجم المعاينة
                 if (orientation === 'landscape') {
                     preview.style.width = '297mm';
                     preview.style.height = '210mm';
@@ -1872,7 +1815,7 @@
                     preview.style.height = '297mm';
                 }
             });
-        });        // تشغيل المعاينة عند تحميل الصفحة
+        });        
         window.addEventListener('load', function() {
             const loadingOverlay = document.getElementById('loading-overlay');
             if (loadingOverlay) {
@@ -1881,18 +1824,14 @@
                     loadingOverlay.style.display = 'none';
                 }, 500);
             }
-            // تهيئة الاتجاه الأفقي كافتراضي
             updateOrientation('landscape');
-            // تحديث المعاينة بعد تعيين الاتجاه
             updatePreview();
         });
     </script>
     <script>
-        // تهيئة متغيرات التحكم في الاتجاه
         const previewElem = document.getElementById('preview');
         const orientationInputs = document.getElementsByName('orientation');
 
-        // دالة تحديث اتجاه الصفحة
         function updateOrientation(orientationType) {
             if (orientationType === 'landscape') {
                 previewElem.classList.add('landscape');
@@ -1901,45 +1840,37 @@
                 previewElem.classList.remove('landscape');
                 document.documentElement.style.setProperty('--page-size', 'A4 portrait');
             }
-        }        // إضافة مستمعي الأحداث لأزرار الاتجاه
-        // إنشاء عنصر style واحد ثابت للطباعة
+        }        
         const printStyleElement = document.createElement('style');
         printStyleElement.id = 'print-orientation-style';
-        // تعيين الاتجاه الافتراضي كأفقي
         printStyleElement.textContent = `@page { size: A4 landscape; }`;
         document.head.appendChild(printStyleElement);
         
         orientationInputs.forEach(input => {
             input.addEventListener('change', function() {
                 updateOrientation(this.value);
-                // تحديث اتجاه الطباعة باستخدام نفس العنصر
                 printStyleElement.textContent = `@page { size: ${this.value === 'landscape' ? 'A4 landscape' : 'A4 portrait'}; }`;
             });
-        });        // دالة الطباعة - تمنع النداءات المتكررة
+        });        
         let isPrinting = false;
         function printPreview() {
-            if (isPrinting) return; // منع الطباعة المتكررة
+            if (isPrinting) return; 
             isPrinting = true;
             
-            // احفظ البيانات الأصلية للإطار
             const originalBorder = preview.style.border;
             const originalHeight = preview.style.height;
             const originalOverflow = preview.style.overflow;
             
-            // تطبيق إعدادات الإطار للطباعة بشكل مضمون
             const selectedBorderStyle = borderStyle ? borderStyle.value : 'solid';
             const borderWidthValue = borderWidth ? borderWidth.value : '3';
             const selectedBorderColor = borderColor ? borderColor.value : '#000000';
             
-            // تطبيق الإطار بشكل مباشر قبل الطباعة
             if (selectedBorderStyle !== 'none') {
                 preview.style.border = `${borderWidthValue}px ${selectedBorderStyle} ${selectedBorderColor}`;
             }
             
-            // تأكد من عدم تجاوز صفحة واحدة في الطباعة
             preview.style.overflow = 'hidden';
             
-            // إضافة style مباشر للطباعة
             const enhancedPrintStyle = document.createElement('style');
             enhancedPrintStyle.id = 'enhanced-print-border';
             enhancedPrintStyle.innerHTML = `
@@ -1967,11 +1898,9 @@
             `;
             document.head.appendChild(enhancedPrintStyle);
             
-            // تأخير قليل لضمان تطبيق التغييرات
             setTimeout(() => {
                 window.print();
                 
-                // إعادة تعيين الإعدادات بعد الطباعة
                 setTimeout(() => {
                     preview.style.border = originalBorder;
                     preview.style.height = originalHeight;
@@ -1982,15 +1911,13 @@
                     isPrinting = false;
                 }, 500);
             }, 200);
-        }// إخفاء شاشة التحميل عند اكتمال تحميل الصفحة
+        }
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('loading-overlay').style.display = 'none';
             
-            // تهيئة أزرار التنقل للهواتف المحمولة
             setupMobileNavigation();
         });
         
-        // إضافة دعم التنقل للهواتف المحمولة
         function setupMobileNavigation() {
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
             const mobileNavigation = document.getElementById('mobile-navigation');
@@ -2001,7 +1928,6 @@
             if (isMobile) {
                 mobileNavigation.style.display = 'flex';
                 
-                // زر الانتقال للتحرير
                 mobileEditBtn.addEventListener('click', () => {
                     window.scrollTo({
                         top: 0,
@@ -2017,12 +1943,10 @@
                     }, 300);
                 });
                 
-                // زر الطباعة
                 mobilePrintBtn.addEventListener('click', () => {
                     printPreview();
                 });
                 
-                // زر المعاينة الأصلي
                 previewBtn.addEventListener('click', function() {
                     const previewEl = document.getElementById('preview');
                     previewEl.scrollIntoView({ behavior: 'smooth' });
@@ -2036,14 +1960,12 @@
                 });
             }
             
-            // التعامل مع تغيير حجم الشاشة
             window.addEventListener('resize', () => {
                 const isMobileNow = window.matchMedia('(max-width: 768px)').matches;
                 mobileNavigation.style.display = isMobileNow ? 'flex' : 'none';
             });
         }
         
-        // إضافة تأثير التحديد لعناصر الواجهة
         const style = document.createElement('style');
         style.textContent = `
             .highlight-animate {
