@@ -1236,29 +1236,6 @@
                 z-index: 999;
             }
             
-            .mobile-nav-button {
-                background-color: #3498db;
-                color: white;
-                border: none;
-                border-radius: 30px;
-                padding: 12px 20px;
-                font-size: 14px;
-                font-weight: bold;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                min-width: 120px;
-            }
-            
-            .mobile-nav-button.print {
-                background-color: #27ae60;
-            }
-            
-            .mobile-nav-button:active {
-                transform: scale(0.95);
-            }
-            
             .preview {
                 margin-bottom: 80px;
             }
@@ -1546,16 +1523,6 @@
         <div class="preview-text" id="preview-text2"></div>
         <div class="preview-text" id="preview-text3"></div>
     </div>
-    
-    <div class="mobile-navigation no-print" id="mobile-navigation" style="display: none;">
-        <button class="mobile-nav-button" id="mobile-edit-btn">
-            تعديل النص
-        </button>
-        <button class="mobile-nav-button print" id="mobile-print-btn">
-            طباعة البوستر
-        </button>
-    </div>
-    
     <script>
         const fontLink = document.createElement('link');
         fontLink.rel = 'stylesheet';
@@ -1920,8 +1887,6 @@
         function setupMobileNavigation() {
             const isMobile = window.matchMedia('(max-width: 768px)').matches;
             const mobileNavigation = document.getElementById('mobile-navigation');
-            const mobileEditBtn = document.getElementById('mobile-edit-btn');
-            const mobilePrintBtn = document.getElementById('mobile-print-btn');
             const container = document.querySelector('.container');
             
             if (isMobile) {
