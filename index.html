@@ -426,6 +426,8 @@
                 margin: 30px auto;
                 box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
                 transform-origin: center top;
+                overflow: hidden; /* منع تجاوز المحتوى */
+                box-sizing: border-box;
             }
             
             .preview.landscape {
@@ -433,6 +435,8 @@
                 max-width: 95%;
                 height: auto;
                 aspect-ratio: 1.414 / 1; /* نسبة أبعاد A4 */
+                box-sizing: border-box;
+                overflow: hidden; /* منع تجاوز المحتوى */
             }
         }
         
@@ -441,6 +445,8 @@
                 margin: 20px auto;
                 padding: 10mm;
                 box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+                overflow: hidden; /* منع تجاوز المحتوى */
+                box-sizing: border-box;
             }
         }.preview-text {
             margin-bottom: 15mm;
@@ -461,8 +467,11 @@
         /* تحسينات نصوص المعاينة للأجهزة المحمولة */
         @media (max-width: 768px) {
             .preview-text {
-                margin-bottom: 10mm;
-                padding: 3mm;
+                margin-bottom: 8mm;
+                padding: 2mm;
+                max-width: 100%;
+                overflow-wrap: break-word;
+                box-sizing: border-box;
             }
             
             .preview:hover .preview-text {
@@ -473,14 +482,37 @@
             /* تحسين أداء المقياس للأجهزة المحمولة */
             .preview.landscape {
                 transform-origin: top center;
-                transform: scale(0.96);
+                transform: scale(0.92);
+                max-height: calc(100vh - 120px); /* تحديد الارتفاع الأقصى لمنع الصفحات المتعددة */
+                overflow: hidden;
+            }
+            
+            /* تعديل تباعد النص مع بعضه */
+            #preview-text1 {
+                margin-bottom: 5mm;
+            }
+            
+            #preview-text2 {
+                margin-bottom: 5mm;
+            }
+            
+            #preview-text3 {
+                margin-bottom: 0;
             }
         }
         
         /* تحسينات للأجهزة شديدة الصغر */
         @media (max-width: 480px) {
             .preview.landscape {
-                transform: scale(0.88);
+                transform: scale(0.85);
+                margin-bottom: 0;
+                padding: 8mm;
+                max-height: calc(100vh - 100px);
+            }
+            
+            .preview-text {
+                margin-bottom: 5mm;
+                font-size: 95%; /* تقليل حجم الخط للأجهزة الأصغر */
             }
         }.font-controls {
             margin-bottom: 20px;
@@ -1152,6 +1184,8 @@
                 background: white !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
+                page-break-after: avoid !important;
+                page-break-before: avoid !important;
             }
             
             .no-print, .container {
@@ -1173,21 +1207,31 @@
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
                 page-break-inside: avoid !important;
+                page-break-after: avoid !important;
                 border: 3px solid #000 !important;
                 box-shadow: none !important;
                 transform: none !important;
                 width: 210mm !important;
                 height: 297mm !important;
+                overflow: hidden !important;
+                max-height: 100% !important;
             }
             
             .preview.landscape {
                 width: 297mm !important;
                 height: 210mm !important;
+                max-height: 100% !important;
+                overflow: hidden !important;
             }
             
             .preview-text {
                 text-shadow: none !important;
                 transform: none !important;
+            }
+            
+            /* منع الصفحات الإضافية */
+            .mobile-navigation, .loading-overlay {
+                display: none !important;
             }
         }
         
@@ -1730,7 +1774,7 @@
             });
         });
         
-        // تعديل سلوك الطباعة للتأكد من ظهور الإطار
+        // تعديل سلوك الطباعة للتأكد من ظهور الإطار وتناسق الصفحات
         window.addEventListener('beforeprint', function(event) {
             // تطبيق الإطار بشكل قوي عند الطباعة
             const selectedBorderStyle = borderStyle.value || 'solid';
@@ -1739,6 +1783,27 @@
                 const selectedBorderColor = borderColor.value || '#000000';
                 preview.style.setProperty('border', `${borderWidthValue}px ${selectedBorderStyle} ${selectedBorderColor}`, 'important');
             }
+            
+            // منع تجاوز الصفحة الواحدة
+            preview.style.setProperty('overflow', 'hidden', 'important');
+            preview.style.setProperty('page-break-after', 'avoid', 'important');
+            preview.style.setProperty('page-break-inside', 'avoid', 'important');
+            preview.style.setProperty('page-break-before', 'avoid', 'important');
+            
+            // تعزيز توافق الطباعة على الهواتف
+            if (window.matchMedia('(max-width: 768px)').matches) {
+                // تقليل المسافات بين النصوص للهواتف
+                previewText1.style.marginBottom = '4mm';
+                previewText2.style.marginBottom = '4mm';
+                previewText3.style.marginBottom = '0';
+            }
+        });
+        
+        // إعادة ضبط الإعدادات بعد الطباعة
+        window.addEventListener('afterprint', function() {
+            // إعادة تعيين الإعدادات التي قد تكون تغيرت أثناء الطباعة
+            updatePreview();
+            isPrinting = false;
         });
 
         // تحديث المعاينة عند اختيار صورة مخصصة
@@ -1860,6 +1925,8 @@
             
             // احفظ البيانات الأصلية للإطار
             const originalBorder = preview.style.border;
+            const originalHeight = preview.style.height;
+            const originalOverflow = preview.style.overflow;
             
             // تطبيق إعدادات الإطار للطباعة بشكل مضمون
             const selectedBorderStyle = borderStyle ? borderStyle.value : 'solid';
@@ -1869,19 +1936,38 @@
             // تطبيق الإطار بشكل مباشر قبل الطباعة
             if (selectedBorderStyle !== 'none') {
                 preview.style.border = `${borderWidthValue}px ${selectedBorderStyle} ${selectedBorderColor}`;
-                
-                // إضافة style مباشر للطباعة
-                const enhancedPrintStyle = document.createElement('style');
-                enhancedPrintStyle.id = 'enhanced-print-border';
-                enhancedPrintStyle.innerHTML = `
-                    @media print {
-                        .preview {
-                            border: ${borderWidthValue}px ${selectedBorderStyle} ${selectedBorderColor} !important;
-                        }
-                    }
-                `;
-                document.head.appendChild(enhancedPrintStyle);
             }
+            
+            // تأكد من عدم تجاوز صفحة واحدة في الطباعة
+            preview.style.overflow = 'hidden';
+            
+            // إضافة style مباشر للطباعة
+            const enhancedPrintStyle = document.createElement('style');
+            enhancedPrintStyle.id = 'enhanced-print-border';
+            enhancedPrintStyle.innerHTML = `
+                @media print {
+                    @page {
+                        size: ${document.querySelector('input[name="orientation"]:checked').value === 'landscape' ? 'A4 landscape' : 'A4 portrait'};
+                        margin: 0;
+                    }
+                    
+                    body {
+                        margin: 0 !important;
+                        padding: 0 !important;
+                        -webkit-print-color-adjust: exact !important;
+                        print-color-adjust: exact !important;
+                    }
+                    
+                    .preview {
+                        border: ${selectedBorderStyle !== 'none' ? `${borderWidthValue}px ${selectedBorderStyle} ${selectedBorderColor}` : 'none'} !important;
+                        overflow: hidden !important;
+                        page-break-after: avoid !important;
+                        page-break-before: avoid !important;
+                        page-break-inside: avoid !important;
+                    }
+                }
+            `;
+            document.head.appendChild(enhancedPrintStyle);
             
             // تأخير قليل لضمان تطبيق التغييرات
             setTimeout(() => {
@@ -1890,12 +1976,15 @@
                 // إعادة تعيين الإعدادات بعد الطباعة
                 setTimeout(() => {
                     preview.style.border = originalBorder;
+                    preview.style.height = originalHeight;
+                    preview.style.overflow = originalOverflow;
+                    
                     const enhancedStyle = document.getElementById('enhanced-print-border');
                     if (enhancedStyle) enhancedStyle.remove();
                     isPrinting = false;
                 }, 500);
             }, 200);
-        }        // إخفاء شاشة التحميل عند اكتمال تحميل الصفحة
+        }// إخفاء شاشة التحميل عند اكتمال تحميل الصفحة
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('loading-overlay').style.display = 'none';
             
