@@ -98,22 +98,6 @@ Open **index.html** in your browser or run the project using **Live Server**.
 
 ---
 
-## 📸 Screenshots
-
-> Add screenshots inside:
-
-```text
-docs/images/
-```
-
-Example:
-
-- Home
-- Editor
-- Print Preview
-
----
-
 ## 👨‍💻 Author | المطور
 
 **Ghaith Alrawi**
