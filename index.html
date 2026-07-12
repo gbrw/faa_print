@@ -1149,7 +1149,85 @@
         .preview.landscape {
             width: 297mm;
             height: 210mm;
-        }               @media print {
+        }
+        
+        .print-size-control {
+            margin-top: 15px;
+        }
+        
+        #print-container {
+            display: none;
+        }
+
+        #preview-half-container {
+            display: none;
+            width: 210mm;
+            height: 297mm;
+            margin: 50px auto;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-sizing: border-box;
+            position: relative;
+            border: 1px solid #ddd;
+            z-index: 1;
+            transition: all 0.3s ease;
+            flex-direction: column;
+        }
+
+        #preview-half-container.landscape {
+            width: 297mm;
+            height: 210mm;
+        }
+
+        .half-preview-section {
+            width: 100%;
+            height: 50%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 5mm;
+        }
+
+        .half-preview-divider {
+            width: 100%;
+            height: 0;
+            border-top: 2px dashed #bbb;
+            flex-shrink: 0;
+        }
+
+        .half-preview-empty {
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0,0,0,0.03) 10px,
+                rgba(0,0,0,0.03) 20px
+            );
+        }
+
+        @media (max-width: 768px) {
+            #preview-half-container {
+                width: 100%;
+                max-width: 95%;
+                margin: 30px auto;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+                transform-origin: center top;
+                overflow: hidden;
+            }
+
+            #preview-half-container.landscape {
+                width: 100%;
+                max-width: 95%;
+                height: auto;
+                aspect-ratio: 1.414 / 1;
+            }
+        }
+
+        @media print {
             @page {
                 size: A4 landscape;
                 margin: 0;
@@ -1170,7 +1248,7 @@
                 display: none !important;
             }
             
-            body > *:not(.preview) {
+            body > *:not(.preview):not(#print-container) {
                 display: none !important;
             }
             
@@ -1470,6 +1548,24 @@
                         </label>
                     </div>
 
+                    <div class="print-size-control">
+                        <label>حجم الطباعة:</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="print-size" value="full" checked>
+                                صفحة كاملة
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="print-size" value="two-halves">
+                                نصفين (عرضين بالصفحة)
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="print-size" value="one-half">
+                                نصف واحد
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="border-control">
                         <label for="border-style">إطار:</label>
                         <select id="border-style" class="border-select">
@@ -1523,6 +1619,7 @@
         <div class="preview-text" id="preview-text2"></div>
         <div class="preview-text" id="preview-text3"></div>
     </div>
+    <div id="preview-half-container"></div>
     <script>
         const fontLink = document.createElement('link');
         fontLink.rel = 'stylesheet';
@@ -1677,6 +1774,8 @@
             
             preview.style.position = 'relative';
             preview.style.zIndex = '1';
+            
+            updateHalfPreview();
         }        
         printBtn.addEventListener('click', function(e) {
             e.preventDefault();
@@ -1715,6 +1814,10 @@
         
         window.addEventListener('afterprint', function() {
             updatePreview();
+            var pc = document.getElementById('print-container');
+            if (pc) pc.remove();
+            var ps = document.getElementById('dynamic-print-style');
+            if (ps) ps.remove();
             isPrinting = false;
         });
 
@@ -1742,6 +1845,12 @@
         borderWidth.addEventListener('input', updatePreview);        backgroundOpacity.addEventListener('input', function() {
             opacityValue.textContent = Math.round(this.value * 100) + '%';
             updatePreview();
+        });
+
+        document.querySelectorAll('input[name="print-size"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                updatePreview();
+            });
         });
 
         document.querySelectorAll('.border-control .color-preset').forEach(preset => {
@@ -1782,6 +1891,125 @@
                 }
             });
         });        
+        function updateHalfPreview() {
+            var printSizeInput = document.querySelector('input[name="print-size"]:checked');
+            var printSize = printSizeInput ? printSizeInput.value : 'full';
+            
+            var halfContainer = document.getElementById('preview-half-container');
+            if (!halfContainer) return;
+            
+            if (printSize === 'full') {
+                halfContainer.style.display = 'none';
+                preview.style.display = 'block';
+                return;
+            }
+            
+            // Hide original preview, show half container
+            preview.style.display = 'none';
+            halfContainer.style.display = 'flex';
+            halfContainer.innerHTML = '';
+            
+            // Match orientation
+            var orientationInput = document.querySelector('input[name="orientation"]:checked');
+            var orientation = orientationInput ? orientationInput.value : 'landscape';
+            if (orientation === 'landscape') {
+                halfContainer.classList.add('landscape');
+            } else {
+                halfContainer.classList.remove('landscape');
+            }
+            
+            // Apply border
+            var bStyle = borderStyle.value;
+            var bWidth = borderWidth.value;
+            var bColor = borderColor ? borderColor.value : '#000000';
+            if (bStyle !== 'none') {
+                halfContainer.style.border = bWidth + 'px ' + bStyle + ' ' + bColor;
+            } else {
+                halfContainer.style.border = '1px solid #ddd';
+            }
+            
+            // Get background settings
+            var selectedBg = document.querySelector('input[name="background-option"]:checked');
+            var bgValue = selectedBg ? selectedBg.value : 'default';
+            var opacity = backgroundOpacity.value;
+            
+            var halfCount = printSize === 'two-halves' ? 2 : 1;
+            
+            for (var i = 0; i < halfCount; i++) {
+                if (i === 1) {
+                    var divider = document.createElement('div');
+                    divider.className = 'half-preview-divider';
+                    halfContainer.appendChild(divider);
+                }
+                
+                var halfDiv = document.createElement('div');
+                halfDiv.className = 'half-preview-section';
+                halfDiv.style.position = 'relative';
+                halfDiv.style.backgroundColor = 'white';
+                
+                // Add background
+                if (bgValue !== 'none') {
+                    var bgDiv = document.createElement('div');
+                    bgDiv.style.cssText = 'position:absolute;top:0;left:0;right:0;bottom:0;z-index:1;opacity:' + opacity + ';background-size:contain;background-position:center;background-repeat:no-repeat;';
+                    if (bgValue === 'default') {
+                        bgDiv.style.backgroundImage = 'url("alfajr.PNG")';
+                    } else if (bgValue === 'custom') {
+                        var existingBg = preview.querySelector('div[style*="background-image"]');
+                        if (existingBg) {
+                            bgDiv.style.backgroundImage = existingBg.style.backgroundImage;
+                        }
+                    }
+                    halfDiv.appendChild(bgDiv);
+                }
+                
+                // Add text elements
+                for (var j = 1; j <= 3; j++) {
+                    var textDiv = document.createElement('div');
+                    textDiv.className = 'preview-text';
+                    textDiv.style.position = 'relative';
+                    textDiv.style.zIndex = '2';
+                    textDiv.style.lineHeight = '1.5';
+                    textDiv.style.textAlign = 'center';
+                    
+                    var textEl = document.getElementById('text' + j);
+                    var fontSizeEl = document.getElementById('font-size' + j);
+                    var fontFamilyEl = document.getElementById('font-family' + j);
+                    var fontColorEl = document.getElementById('font-color' + j);
+                    var boldEl = document.getElementById('bold' + j);
+                    var italicEl = document.getElementById('italic' + j);
+                    var underlineEl = document.getElementById('underline' + j);
+                    
+                    textDiv.textContent = textEl.value;
+                    
+                    var fullSize = parseInt(fontSizeEl.value) || 16;
+                    var scaledSize = fullSize * 0.55;
+                    
+                    textDiv.style.fontSize = scaledSize + 'px';
+                    textDiv.style.fontFamily = fontFamilyEl.value;
+                    textDiv.style.color = fontColorEl.value;
+                    textDiv.style.fontWeight = boldEl.checked ? 'bold' : 'normal';
+                    textDiv.style.fontStyle = italicEl.checked ? 'italic' : 'normal';
+                    textDiv.style.textDecoration = underlineEl.checked ? 'underline' : 'none';
+                    textDiv.style.marginBottom = Math.max(5, scaledSize / 4) + 'px';
+                    
+                    halfDiv.appendChild(textDiv);
+                }
+                
+                halfContainer.appendChild(halfDiv);
+            }
+            
+            // If one-half, add divider and empty bottom
+            if (printSize === 'one-half') {
+                var dividerLine = document.createElement('div');
+                dividerLine.className = 'half-preview-divider';
+                halfContainer.appendChild(dividerLine);
+                
+                var emptyHalf = document.createElement('div');
+                emptyHalf.className = 'half-preview-section half-preview-empty';
+                halfContainer.appendChild(emptyHalf);
+            }
+        }
+
         window.addEventListener('load', function() {
             const loadingOverlay = document.getElementById('loading-overlay');
             if (loadingOverlay) {
@@ -1819,7 +2047,7 @@
             });
         });        
         let isPrinting = false;
-        function printPreview() {
+        function printPreviewFull() {
             if (isPrinting) return; 
             isPrinting = true;
             
@@ -1874,6 +2102,102 @@
                     
                     const enhancedStyle = document.getElementById('enhanced-print-border');
                     if (enhancedStyle) enhancedStyle.remove();
+                    isPrinting = false;
+                }, 500);
+            }, 200);
+        }
+        function printPreview() {
+            var printSizeInput = document.querySelector('input[name="print-size"]:checked');
+            var printSize = printSizeInput ? printSizeInput.value : 'full';
+            
+            if (printSize === 'full') {
+                printPreviewFull();
+                return;
+            }
+            
+            if (isPrinting) return;
+            isPrinting = true;
+            
+            var orientation = document.querySelector('input[name="orientation"]:checked').value;
+            var isLandscape = orientation === 'landscape';
+            var selectedBorderStyle = borderStyle ? borderStyle.value : 'solid';
+            var bWidth = borderWidth ? borderWidth.value : '3';
+            var selectedBorderColor = borderColor ? borderColor.value : '#000000';
+            var borderCSS = selectedBorderStyle !== 'none' 
+                ? bWidth + 'px ' + selectedBorderStyle + ' ' + selectedBorderColor 
+                : 'none';
+            
+            var oldPC = document.getElementById('print-container');
+            if (oldPC) oldPC.remove();
+            var oldPS = document.getElementById('dynamic-print-style');
+            if (oldPS) oldPS.remove();
+            
+            var pageWidth = isLandscape ? '297mm' : '210mm';
+            var pageHeight = isLandscape ? '210mm' : '297mm';
+            var halfHeight = isLandscape ? '105mm' : '148.5mm';
+            var halfCount = printSize === 'two-halves' ? 2 : 1;
+            
+            var printContainer = document.createElement('div');
+            printContainer.id = 'print-container';
+            
+            for (var i = 0; i < halfCount; i++) {
+                if (i === 1) {
+                    var divider = document.createElement('div');
+                    divider.className = 'print-divider';
+                    printContainer.appendChild(divider);
+                }
+                
+                var halfDiv = document.createElement('div');
+                halfDiv.className = 'print-half';
+                
+                var clone = preview.cloneNode(true);
+                clone.removeAttribute('id');
+                clone.style.cssText = 
+                    'width:100%!important;height:100%!important;margin:0!important;' +
+                    'padding:5mm!important;box-shadow:none!important;transform:none!important;' +
+                    'position:relative!important;box-sizing:border-box!important;' +
+                    'display:flex!important;flex-direction:column!important;' +
+                    'align-items:center!important;justify-content:center!important;' +
+                    'border:' + borderCSS + '!important;overflow:hidden!important;' +
+                    'background-color:white!important;';
+                
+                clone.querySelectorAll('.preview-text').forEach(function(t) {
+                    var currentSize = parseFloat(t.style.fontSize) || 16;
+                    t.style.fontSize = (currentSize * 0.55) + 'px';
+                    var currentMargin = parseFloat(t.style.marginBottom) || 10;
+                    t.style.marginBottom = (currentMargin * 0.4) + 'px';
+                    t.style.textShadow = 'none';
+                    t.style.transform = 'none';
+                });
+                
+                halfDiv.appendChild(clone);
+                printContainer.appendChild(halfDiv);
+            }
+            
+            document.body.appendChild(printContainer);
+            
+            var printStyle = document.createElement('style');
+            printStyle.id = 'dynamic-print-style';
+            var pageSize = isLandscape ? 'A4 landscape' : 'A4 portrait';
+            printStyle.innerHTML = 
+                '@media print {' +
+                ' @page { size: ' + pageSize + '; margin: 0; }' +
+                ' body { margin:0!important;padding:0!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important; }' +
+                ' body > *:not(#print-container) { display:none!important; }' +
+                ' .preview { display:none!important; }' +
+                ' #print-container { display:flex!important;flex-direction:column!important;width:' + pageWidth + '!important;height:' + pageHeight + '!important;margin:0!important;padding:0!important;page-break-inside:avoid!important; }' +
+                ' .print-half { width:' + pageWidth + '!important;height:calc(' + halfHeight + ' - 0.5mm)!important;overflow:hidden!important;box-sizing:border-box!important;padding:2mm!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important; }' +
+                ' .print-divider { width:100%!important;height:0!important;border-top:1px dashed #aaa!important;margin:0!important;padding:0!important; }' +
+                '}';
+            document.head.appendChild(printStyle);
+            
+            setTimeout(function() {
+                window.print();
+                setTimeout(function() {
+                    var ps = document.getElementById('dynamic-print-style');
+                    if (ps) ps.remove();
+                    var pc = document.getElementById('print-container');
+                    if (pc) pc.remove();
                     isPrinting = false;
                 }, 500);
             }, 200);
