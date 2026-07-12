@@ -1,105 +1,51 @@
-# 🖨️ AlFajr Offer Printing System | نظام طباعة عروض الفجر
+# طباعة عروض - الفجر
 
-<div align="center">
+أداة ويب بسيطة (صفحة HTML واحدة، بدون خادم أو تبعيات) لتصميم وطباعة لافتات/عروض أسعار جاهزة للطباعة على ورق A4، مع دعم كامل للغة العربية (RTL).
 
-**Professional A4 Offer Printing Tool**  
-**أداة احترافية لتصميم وطباعة العروض التجارية**
+## المميزات
 
-HTML • CSS • JavaScript • Responsive • RTL
+- **ثلاثة حقول نصية قابلة للتخصيص** (مثل: "عرض خاص"، اسم المادة، السعر)، لكل حقل:
+  - حجم الخط
+  - نوع الخط (Cairo, Arial, Droid Arabic Kufi, Amiri, Tajawal)
+  - النمط (غامق / مائل / تحته خط)
+  - اللون (ألوان جاهزة قابلة للاختيار)
+- **معاينة حية** لشكل اللافتة أثناء التعديل
+- **إعدادات الخلفية**:
+  - خلفية افتراضية (شعار الفجر)
+  - رفع خلفية مخصصة
+  - بدون خلفية
+  - التحكم بشفافية الخلفية
+- **اتجاه الصفحة**: عمودي أو أفقي
+- **أحجام الطباعة**:
+  - صفحة كاملة
+  - نصفين (عرضين في نفس الصفحة A4)
+  - نصف واحد فقط
+- **إعدادات الإطار**: نوع الإطار (بسيط، مزدوج، متقطع، منقط، محفور، بارز)، سمكه، ولونه
+- تصميم متجاوب (Responsive) يعمل على الجوال والحاسوب
+- طباعة مباشرة من المتصفح بضغطة زر واحدة
 
-</div>
+## طريقة الاستخدام
 
----
+1. افتح ملف `index.html` في أي متصفح حديث (Chrome, Edge, Firefox...).
+2. عدّل النصوص الثلاثة وخصائصها (الخط، الحجم، اللون...) حسب الحاجة.
+3. اختر إعدادات التصميم (الخلفية، اتجاه الصفحة، حجم الطباعة، الإطار).
+4. راقب المعاينة المباشرة أسفل الصفحة.
+5. اضغط زر **"طباعة"** لطباعة اللافتة مباشرة أو حفظها كـ PDF عبر خيار "طباعة إلى PDF" في نافذة الطباعة.
 
-# 🇬🇧 English
+## المتطلبات
 
-## Overview
+- لا يوجد خادم أو تثبيت مطلوب — الملف يعمل مباشرة من المتصفح.
+- يفضّل وجود اتصال بالإنترنت لتحميل خطوط Google Fonts المستخدمة (Cairo, Amiri, Tajawal, Droid Arabic Kufi).
+- ضع صورة الشعار باسم `alfajr.PNG` في نفس مجلد الملف لتظهر كخلفية افتراضية وفي أعلى الصفحة.
 
-AlFajr Offer Printing System is a lightweight web application for creating and printing professional promotional offer sheets on A4 paper. It includes live preview, customizable typography, backgrounds, borders, and multiple print layouts without requiring a backend.
+## هيكل المشروع
 
-### Features
-
-- Live preview before printing
-- Three customizable text sections
-- Arabic font support
-- Font size, color and style controls
-- Default or custom background image
-- Adjustable background opacity
-- Portrait & Landscape printing
-- Full page, half page and two-offers-per-page modes
-- Custom border style, width and color
-- Responsive design for desktop and mobile
-- Pure HTML, CSS and JavaScript
-
-### Technologies
-
-- HTML5
-- CSS3
-- JavaScript
-- Google Fonts
-
-### Project Structure
-
-```text
+```
 .
-├── index.html
-├── alfajr.PNG
-└── README.md
+├── index.html      # الملف الرئيسي (واجهة + تنسيق + منطق الطباعة)
+└── alfajr.PNG       # شعار المشروع (يجب إضافته يدويًا)
 ```
 
-### Getting Started
+## الترخيص
 
-```bash
-git clone https://github.com/your-username/alfajr-offer-printing.git
-cd alfajr-offer-printing
-```
-
-Open **index.html** in your browser or run the project using **Live Server**.
-
-### Recommended Browsers
-
-- Google Chrome
-- Microsoft Edge
-- Firefox
-
----
-
-# 🇸🇦 العربية
-
-## نبذة
-
-نظام **طباعة عروض الفجر** هو تطبيق ويب مخصص لإنشاء وطباعة عروض الأسعار والإعلانات التجارية بقياس **A4** مع معاينة مباشرة وإمكانية تخصيص النصوص والخلفيات والإطارات وخيارات الطباعة بالكامل، دون الحاجة إلى خادم أو قاعدة بيانات.
-
-### المميزات
-
-- معاينة مباشرة قبل الطباعة.
-- ثلاثة حقول نص مستقلة.
-- دعم كامل للغة العربية.
-- التحكم في حجم الخط ونوعه ولونه.
-- دعم الخط الغامق والمائل وتحته خط.
-- اختيار خلفية افتراضية أو صورة مخصصة.
-- التحكم في شفافية الخلفية.
-- الطباعة بالاتجاه العمودي أو الأفقي.
-- الطباعة بصفحة كاملة أو نصف صفحة أو عرضين في صفحة واحدة.
-- تخصيص الإطار (النوع، السمك، اللون).
-- تصميم متجاوب مع الهواتف وأجهزة الكمبيوتر.
-- يعتمد على HTML وCSS وJavaScript فقط.
-
-### تشغيل المشروع
-
-1. ضع ملف **alfajr.PNG** بجانب **index.html**.
-2. افتح ملف **index.html** في المتصفح.
-3. أو شغّل المشروع باستخدام **Live Server**.
-
-### ملاحظات
-
-- يوصى باستخدام Google Chrome للحصول على أفضل نتائج للطباعة.
-- يجب تفعيل خيار **Background Graphics** من نافذة الطباعة لطباعة الخلفيات.
-
----
-
-## 👨‍💻 Author | المطور
-
-**Ghaith Alrawi**
-
-© 2025 All Rights Reserved.
+جميع الحقوق محفوظة © Ghaith Alrawi 2025
